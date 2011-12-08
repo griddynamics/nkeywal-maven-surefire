@@ -107,11 +107,8 @@ public class JUnitCoreProvider
     public RunResult invoke( Object forkTestSet )
         throws TestSetFailedException, ReporterException
     {
-        final String message = "Concurrency config is " + jUnitCoreParameters.toString() + "\n";
         final ReporterFactory reporterFactory = providerParameters.getReporterFactory();
-
         final ConsoleLogger consoleLogger = providerParameters.getConsoleLogger();
-        consoleLogger.info( message );
 
         Filter filter = jUnit48Reflector.isJUnit48Available() ? createJUnit48Filter() : null;
 
