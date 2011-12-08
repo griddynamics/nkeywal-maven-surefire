@@ -51,6 +51,9 @@ public abstract class ConcurrentReporterManager
 
     private final ConsoleLogger consoleLogger;
 
+    private long startTime;
+    private long endTime;
+
     ConcurrentReporterManager( ReporterFactory reporterFactory, ConsoleLogger consoleLogger, boolean reportImmediately,
                                Map<String, TestSet> classMethodCounts )
         throws TestSetFailedException
@@ -63,14 +66,16 @@ public abstract class ConcurrentReporterManager
 
     public void testSetStarting( ReportEntry description )
     {
+      startTime = System.currentTimeMillis();
     }
 
     public void testSetCompleted( ReportEntry result )
     {
+        endTime = System.currentTimeMillis();
         final RunListener reporterManager = getRunListener();
         for ( TestSet testSet : classMethodCounts.values() )
         {
-            testSet.replay( reporterManager );
+            testSet.replay( reporterManager, (int)(endTime - startTime) );
         }
     }
 

@@ -59,7 +59,7 @@ public class TestSet
         this.testSetDescription = testSetDescription;
     }
 
-    public void replay( RunListener target )
+    public void replay( RunListener target, int elapsed )
     {
         if ( !played.compareAndSet( false, true ) )
         {
@@ -68,12 +68,13 @@ public class TestSet
 
         try
         {
-            int elapsed = 0;
-            for ( TestMethod testMethod : testMethods )
-            {
-                elapsed += testMethod.getElapsed();
+            if (elapsed == 0) {
+              for ( TestMethod testMethod : testMethods )
+              {
+                  elapsed += testMethod.getElapsed();
+              }
             }
-            ReportEntry report = createReportEntry( null );
+            ReportEntry report = createReportEntry( elapsed );
 
             target.testSetStarting( report );
 
@@ -81,8 +82,6 @@ public class TestSet
             {
                 testMethod.replay( target );
             }
-
-            report = createReportEntry( elapsed );
 
             target.testSetCompleted( report );
         }
@@ -122,7 +121,7 @@ public class TestSet
         numberOfCompletedChildren.incrementAndGet();
         if ( allScheduled.get() && isAllTestsDone() && reportImmediately )
         {
-            replay( reporterManager );
+            replay( reporterManager, 0 );
         }
     }
 
@@ -131,7 +130,7 @@ public class TestSet
         allScheduled.set( true );
         if ( isAllTestsDone() )
         {
-            replay( reporterManager );
+            replay( reporterManager, 0 );
         }
     }
 
