@@ -185,33 +185,20 @@ public abstract class ConcurrentReporterManager
                                                consoleLogger );
     }
 
-    // The logical stream to use when we don't have yet a test method
-    // => We will attach this data to the first test method
-    private LogicalStream preMethodlogicalStream;
-    // The logical stream to use when we don't have anymore a test method
-    //  => we will attach the new data to the previous one
-    private LogicalStream postMethodlogicalStream;
+
     public void writeTestOutput( byte[] buf, int off, int len, boolean stdout )
     {
         TestMethod threadTestMethod = TestMethod.getThreadTestMethod();
-        LogicalStream logicalStream;
         if ( threadTestMethod != null )
         {
-            logicalStream = threadTestMethod.getLogicalStream(preMethodlogicalStream);
-            preMethodlogicalStream = null;
-            postMethodlogicalStream = logicalStream;
-        } else {
-            if (postMethodlogicalStream != null){
-                logicalStream = postMethodlogicalStream;
-            }   else {
-              if (preMethodlogicalStream == null){
-                  preMethodlogicalStream = new LogicalStream();
-              }
-              logicalStream = preMethodlogicalStream;
-            }
+            final LogicalStream logicalStream = threadTestMethod.getLogicalStream();
+            logicalStream.write( stdout, buf, off, len );
         }
-
-        logicalStream.write( stdout, buf, off, len );
+        else
+        {
+            // Not able to assocaite output with any thread. Just dump to console
+            consoleLogger.info( new String( buf, off, len ) );
+        }
     }
 
 }
