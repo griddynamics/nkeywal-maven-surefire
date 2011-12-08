@@ -144,18 +144,22 @@ class TestMethod
         return TEST_METHOD.get();
     }
 
-    public LogicalStream getLogicalStream()
+    public LogicalStream getLogicalStream(LogicalStream pastOutput)
     {
         if ( output == null )
         {
+          if (pastOutput == null){
             output = new LogicalStream();
+          } else {
+             output = pastOutput;
+          }
         }
         return output;
     }
 
     public void writeTestOutput( byte[] buf, int off, int len, boolean stdout )
     {
-        getLogicalStream().write( stdout, buf, off, len );
+        getLogicalStream(null).write( stdout, buf, off, len );
     }
 
 }
