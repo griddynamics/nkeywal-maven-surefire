@@ -36,7 +36,7 @@ public class TestSetRunListener
 {
     private final TestSetStatistics testSetStatistics;
 
-    private final RunStatistics globalStatistics;
+    private final   RunStatistics globalStatistics;
 
     private final MulticastingReporter multicastingReporter;
 

@@ -156,6 +156,8 @@ public class ForkStarter
                 RunResult cur = result.get();
                 if (cur != null){
                     globalResult = globalResult.aggregate(cur);
+                } else {
+                    System.err.println("No results for "+result.toString());
                 }
             } catch (InterruptedException e) {
                 throw new SurefireBooterForkException("Interrupted", e);
@@ -175,6 +177,8 @@ public class ForkStarter
         return globalResult;
     }
 
+    private static volatile int systemPropertiesFileCounter = 0;
+    private static final Object lock = new Object();
     private RunResult fork( Object testSet, Properties properties, ForkClient forkClient,
                             RunStatistics globalRunStatistics )
         throws SurefireBooterForkException
@@ -183,16 +187,19 @@ public class ForkStarter
         File systemProperties = null;
         try
         {
-            BooterSerializer booterSerializer = new BooterSerializer( forkConfiguration, properties );
+            synchronized (lock) {
+                BooterSerializer booterSerializer = new BooterSerializer( forkConfiguration, properties );
 
-            surefireProperties = booterSerializer.serialize( providerConfiguration, startupConfiguration, testSet,
-                                                             forkConfiguration.getForkMode() );
+                surefireProperties = booterSerializer.serialize( providerConfiguration, startupConfiguration, testSet,
+                                                                 forkConfiguration.getForkMode() );
 
-            if ( forkConfiguration.getSystemProperties() != null )
-            {
-                systemProperties = SystemPropertyManager.writePropertiesFile( forkConfiguration.getSystemProperties(),
-                                                                              forkConfiguration.getTempDirectory(),
-                                                                              "surefire", forkConfiguration.isDebug() );
+                if (forkConfiguration.getSystemProperties() != null) {
+                    systemProperties = SystemPropertyManager.writePropertiesFile(
+                        forkConfiguration.getSystemProperties(),
+                        forkConfiguration.getTempDirectory(),
+                        "surefire_" + systemPropertiesFileCounter++,
+                        forkConfiguration.isDebug());
+                }
             }
         }
         catch ( IOException e )
@@ -238,7 +245,7 @@ public class ForkStarter
 
             if ( result != RunResult.SUCCESS )
             {
-                throw new SurefireBooterForkException( "Error occured in starting fork, check output in log" );
+                throw new SurefireBooterForkException( "Error occurred in starting fork, check output in log" );
             }
             threadedStreamConsumer.close();
             forkClient.close();
@@ -290,7 +297,7 @@ public class ForkStarter
         RunStatistics globalRunStatistics;
 
         public ParallelFork(ForkStarter f, Object testSet, Properties properties, ForkClient forkClient,
-                            RunStatistics globalRunStatistics) throws SurefireBooterForkException {
+                            RunStatistics globalRunStatistics) {
             this.f = f;
             this.testSet = testSet;
             this.properties = properties;
@@ -302,6 +309,7 @@ public class ForkStarter
             try {
               return f.fork(testSet, properties, forkClient, globalRunStatistics);
             } catch (SurefireBooterForkException e) {
+              e.printStackTrace();
               return null;
             }
         }
