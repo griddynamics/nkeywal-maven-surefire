@@ -21,8 +21,9 @@ package org.apache.maven.plugin.surefire.booterclient;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.*;
+
 import org.apache.maven.plugin.surefire.CommonReflector;
 import org.apache.maven.plugin.surefire.booterclient.output.ForkClient;
 import org.apache.maven.plugin.surefire.booterclient.output.ThreadedStreamConsumer;
@@ -116,19 +117,59 @@ public class ForkStarter
         return result;
     }
 
-    private RunResult runSuitesForkPerTestSet( Properties properties, ForkClient forkClient,
-                                               RunStatistics globalRunStatistics )
-        throws SurefireBooterForkException
-    {
-        RunResult globalResult = new RunResult( 0, 0, 0, 0 );
+    private static final String FORKCOUNT_KEY = "surefire.forkCount";
+    private int getForkCount() throws SurefireBooterForkException {
+        String forkCountAsString =  System.getProperty( FORKCOUNT_KEY, "1" );
+        try {
+            return Integer.parseInt(forkCountAsString) ;
+        }  catch (NumberFormatException e){
+            throw new SurefireBooterForkException("Can't parse, expecting an integer in "+FORKCOUNT_KEY, e);
+        }
+    }
 
+    private RunResult runSuitesForkPerTestSet(Properties properties, ForkClient forkClient,
+                                              RunStatistics globalRunStatistics)
+        throws SurefireBooterForkException {
+
+        int forkCount = getForkCount();
+        ArrayList<Future<RunResult>> results = new ArrayList<Future<RunResult>>(500);
+
+        ExecutorService executorService = new ThreadPoolExecutor(
+            forkCount, forkCount,
+            60, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(500));
+
+
+        // Ask to the executorService to run all tasks
+        RunResult globalResult = new RunResult(0, 0, 0, 0);
         final Iterator suites = getSuitesIterator();
 
-        while ( suites.hasNext() )
-        {
+        while (suites.hasNext()) {
             Object testSet = suites.next();
-            RunResult runResult = fork( testSet, properties, forkClient, globalRunStatistics );
-            globalResult = globalResult.aggregate( runResult );
+            ParallelFork pf = new ParallelFork(this, testSet, properties, forkClient, globalRunStatistics);
+            results.add(executorService.submit(pf));
+        }
+
+        // Now getting the results
+        for (Future<RunResult> result : results) {
+            try {
+                RunResult cur = result.get();
+                if (cur != null){
+                    globalResult = globalResult.aggregate(cur);
+                }
+            } catch (InterruptedException e) {
+                throw new SurefireBooterForkException("Interrupted", e);
+            } catch (ExecutionException e) {
+                throw new SurefireBooterForkException("ExecutionException", e);
+            }
+        }
+
+        executorService.shutdown();
+        try {
+            // Should stop immediately, as we got all the results if we are here
+            executorService.awaitTermination(1, TimeUnit.HOURS);
+        } catch (InterruptedException e) {
+            throw new SurefireBooterForkException("Interrupted", e);
         }
 
         return globalResult;
@@ -241,5 +282,28 @@ public class ForkStarter
         }
     }
 
+    static class ParallelFork implements Callable {
+        ForkStarter f;
+        Object testSet;
+        Properties properties;
+        ForkClient forkClient;
+        RunStatistics globalRunStatistics;
 
+        public ParallelFork(ForkStarter f, Object testSet, Properties properties, ForkClient forkClient,
+                            RunStatistics globalRunStatistics) throws SurefireBooterForkException {
+            this.f = f;
+            this.testSet = testSet;
+            this.properties = properties;
+            this.forkClient = forkClient;
+            this.globalRunStatistics = globalRunStatistics;
+        }
+
+        public RunResult call() {
+            try {
+              return f.fork(testSet, properties, forkClient, globalRunStatistics);
+            } catch (SurefireBooterForkException e) {
+              return null;
+            }
+        }
+    }
 }
