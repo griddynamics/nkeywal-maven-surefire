@@ -89,7 +89,7 @@ public class ForkingRunListener
         this( target, testSetChannelId, false );
     }
 
-    public ForkingRunListener( PrintStream target, int testSetChannelId, boolean trimStackTraces )
+    public  ForkingRunListener( PrintStream target, int testSetChannelId, boolean trimStackTraces )
     {
         this.target = target;
         this.testSetChannelId = new Integer( testSetChannelId );

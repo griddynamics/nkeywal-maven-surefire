@@ -85,8 +85,13 @@ public class ForkClient
                 //reporter = new AsynchRunListener( reporter, "ForkClient" );
                 testSetReporters.put( channelNumber, reporter );
             }
+
             int rest = s.indexOf( ",", commma );
             final String remaining = s.substring( rest + 1 );
+
+          //System.err.println(hashCode()+ " - Reporter is "+reporter.getClass().getSimpleName()+":"+
+          // reporter.hashCode()+" "+ channelNumber +"-"+remaining);
+
 
             switch ( operationId )
             {
@@ -140,12 +145,12 @@ public class ForkClient
                     ( (ConsoleLogger) reporter ).info( createConsoleMessage( remaining ) );
                     break;
                 default:
-                    System.out.println( s );
+                    System.out.println( "default: " + s );
             }
         }
         catch ( NumberFormatException e )
         {
-            System.out.println( s );
+            System.out.println("NumberFormatException: "+ s );
         }
         catch ( ReporterException e )
         {

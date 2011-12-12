@@ -59,8 +59,10 @@ public class TestSet
         this.testSetDescription = testSetDescription;
     }
 
+   private static Object lock = new Object();
     public void replay( RunListener target, int elapsed )
     {
+      synchronized (lock){
         if ( !played.compareAndSet( false, true ) )
         {
             return;
@@ -89,6 +91,7 @@ public class TestSet
         {
             throw new NestedRuntimeException( e );
         }
+      }
     }
 
     public TestMethod createTestMethod( ReportEntry description )

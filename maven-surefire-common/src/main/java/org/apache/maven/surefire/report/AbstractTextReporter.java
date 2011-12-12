@@ -57,6 +57,8 @@ public abstract class AbstractTextReporter
     {
         this( trimStackTrace, format);
         this.writer = writer;
+        //System.err.println(this.hashCode()+"-"+"Creating AbstractTextReporter: "+
+        //  writer == null ? "writer null":writer.getClass().getName());
     }
 
 
@@ -72,6 +74,8 @@ public abstract class AbstractTextReporter
             writer.print( message );
 
             writer.flush();
+        }  else {
+          //System.err.println(this.hashCode()+"-"+this.getClass().getName()+": writeMessage  writer is null... "+message);
         }
     }
 
@@ -121,7 +125,10 @@ public abstract class AbstractTextReporter
         throws ReporterException
     {
         super.testSetCompleted( report );
-
+                                                      /*
+        System.err.println(
+          this.hashCode()+"-"+getClass().getName()+  "#testSetCompleted: getTestSetSummary Format: "+format+
+            " "+report.getName()+ " "+getTestSetSummary(report));    */
         writeMessage( getTestSetSummary( report ) );
 
         if ( format.equals( BRIEF ) || format.equals( PLAIN ) )
@@ -130,6 +137,7 @@ public abstract class AbstractTextReporter
             {
                 writeMessage( (String) i.next() );
             }
+        }else {
         }
     }
 

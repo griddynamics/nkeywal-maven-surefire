@@ -68,10 +68,12 @@ public abstract class AbstractFileReporter
             //noinspection ResultOfMethodCallIgnored
             reportFile.delete();
         }
+      //System.err.println(this.hashCode()+"-"+getClass().getName() +"#testSetStarting: deleted reportFile "+reportFile.getName());
 
         try
         {
             PrintWriter writer = new PrintWriter( new FileWriter( reportFile ) );
+          //System.err.println(getClass().getName() +"#testSetStarting: created reportFile "+reportFile.getName());
 
             writer.println( "-------------------------------------------------------------------------------" );
 
@@ -79,7 +81,7 @@ public abstract class AbstractFileReporter
 
             writer.println( "-------------------------------------------------------------------------------" );
 
-            setWriter( writer );
+            setWriter(writer);
         }
         catch ( IOException e )
         {
@@ -91,6 +93,7 @@ public abstract class AbstractFileReporter
             String reportNameSuffix, String fileExtension )
     {
         File reportFile;
+        //System.err.println(" reportEntryName="+reportEntryName+ " reportNameSuffix="+reportNameSuffix+ " reportsDirectory="+reportsDirectory+ " fileExtension="+fileExtension);
 
         if ( reportNameSuffix != null && reportNameSuffix.length() > 0)
         {
@@ -108,10 +111,19 @@ public abstract class AbstractFileReporter
     {
         super.testSetCompleted( report );
 
+      if (writer == null ){
+        throw new NullPointerException(
+          this.hashCode()+"-"+getClass().getName() + ":testSetCompleted: writer is null for report "+
+            report.getName()+" - this error should have not impact"
+        ) ;
+      }else {
+        //System.err.println(this.hashCode()+"-"+getClass().getName() +":testSetCompleted Gonna close the writer for report "+report.getName());
+      }
+
+
+
         writer.flush();
-
         writer.close();
-
         writer = null;
     }
 }

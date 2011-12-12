@@ -68,10 +68,10 @@ public class ForkStarter
     private final ProviderConfiguration providerConfiguration;
 
     private final StartupConfiguration startupConfiguration;
-
     private final ForkConfiguration forkConfiguration;
-
     private final StartupReportConfiguration startupReportConfiguration;
+    private final FileReporterFactory fileReporterFactory;
+
 
     public ForkStarter( ProviderConfiguration providerConfiguration, StartupConfiguration startupConfiguration,
                         ForkConfiguration forkConfiguration, int forkedProcessTimeoutInSeconds,
@@ -82,28 +82,30 @@ public class ForkStarter
         this.forkedProcessTimeoutInSeconds = forkedProcessTimeoutInSeconds;
         this.startupConfiguration = startupConfiguration;
         this.startupReportConfiguration = startupReportConfiguration;
+        fileReporterFactory = new FileReporterFactory( startupReportConfiguration );
     }
 
     public RunResult run()
         throws SurefireBooterForkException, SurefireExecutionException
     {
         final RunResult result;
-
         final String requestedForkMode = forkConfiguration.getForkMode();
-        final FileReporterFactory fileReporterFactory = new FileReporterFactory( startupReportConfiguration );
         try
         {
-            final ForkClient forkClient =
-                new ForkClient( fileReporterFactory, startupReportConfiguration.getTestVmSystemProperties() );
-            final RunStatistics globalRunStatistics = fileReporterFactory.getGlobalRunStatistics();
             if ( ForkConfiguration.FORK_ONCE.equals( requestedForkMode ) )
             {
-                result = fork( null, providerConfiguration.getProviderProperties(), forkClient, globalRunStatistics );
+                result = fork( null, providerConfiguration.getProviderProperties(),
+                  new ForkClient( fileReporterFactory, startupReportConfiguration.getTestVmSystemProperties()),
+                  fileReporterFactory.getGlobalRunStatistics()
+                );
             }
-            else if ( ForkConfiguration.FORK_ALWAYS.equals( requestedForkMode ) )
+            else if ( ForkConfiguration.FORK_ALWAYS.equals( requestedForkMode ))
             {
-                result = runSuitesForkPerTestSet( providerConfiguration.getProviderProperties(), forkClient,
-                                                  globalRunStatistics );
+                result = runSuitesForkPerTestSet( providerConfiguration.getProviderProperties(), 1 );
+            }
+            else if ( ForkConfiguration.FORK_PERTHREAD.equals( requestedForkMode ) )
+            {
+                result = runSuitesForkPerTestSet( providerConfiguration.getProviderProperties(), forkConfiguration.getThreadCount() );
             }
             else
             {
@@ -117,36 +119,23 @@ public class ForkStarter
         return result;
     }
 
-    private static final String FORKCOUNT_KEY = "surefire.forkCount";
-    private int getForkCount() throws SurefireBooterForkException {
-        String forkCountAsString =  System.getProperty( FORKCOUNT_KEY, "1" );
-        try {
-            return Integer.parseInt(forkCountAsString) ;
-        }  catch (NumberFormatException e){
-            throw new SurefireBooterForkException("Can't parse, expecting an integer in "+FORKCOUNT_KEY, e);
-        }
-    }
-
-    private RunResult runSuitesForkPerTestSet(Properties properties, ForkClient forkClient,
-                                              RunStatistics globalRunStatistics)
+    private RunResult runSuitesForkPerTestSet(Properties properties, int forkCount)
         throws SurefireBooterForkException {
 
-        int forkCount = getForkCount();
         ArrayList<Future<RunResult>> results = new ArrayList<Future<RunResult>>(500);
-
         ExecutorService executorService = new ThreadPoolExecutor(
             forkCount, forkCount,
             60, TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(500));
 
-
         // Ask to the executorService to run all tasks
         RunResult globalResult = new RunResult(0, 0, 0, 0);
         final Iterator suites = getSuitesIterator();
-
         while (suites.hasNext()) {
             Object testSet = suites.next();
-            ParallelFork pf = new ParallelFork(this, testSet, properties, forkClient, globalRunStatistics);
+            ParallelFork pf = new ParallelFork(this, testSet, properties,
+            new ForkClient( fileReporterFactory, startupReportConfiguration.getTestVmSystemProperties() ),
+            fileReporterFactory.getGlobalRunStatistics());
             results.add(executorService.submit(pf));
         }
 
@@ -157,6 +146,7 @@ public class ForkStarter
                 if (cur != null){
                     globalResult = globalResult.aggregate(cur);
                 } else {
+                    // Should not happen
                     System.err.println("No results for "+result.toString());
                 }
             } catch (InterruptedException e) {
@@ -174,7 +164,7 @@ public class ForkStarter
             throw new SurefireBooterForkException("Interrupted", e);
         }
 
-        return globalResult;
+      return globalResult;
     }
 
     private static volatile int systemPropertiesFileCounter = 0;

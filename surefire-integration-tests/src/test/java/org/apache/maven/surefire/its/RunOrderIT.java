@@ -45,7 +45,7 @@ public class RunOrderIT
 
     private File testDir;
 
-    private Verifier verifier;
+    protected Verifier verifier;
 
     public void setUp()
         throws IOException, VerificationException
@@ -111,10 +111,13 @@ public class RunOrderIT
         HelperAssertions.assertTestSuiteResults( 3, 0, 0, 0, testDir );
     }
 
-    private void executeTestsWithRunOrder( String runOrder )
+
+    protected String getForkMode(){ return "once";}
+    protected void executeTestsWithRunOrder( String runOrder )
         throws VerificationException
     {
         List<String> goals = getInitialGoals();
+        goals.add( "-DforkMode="+getForkMode());
         goals.add( "-DrunOrder=" + runOrder );
         goals.add( "test" );
         executeGoals( verifier, goals );

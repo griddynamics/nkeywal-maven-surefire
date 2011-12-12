@@ -54,6 +54,11 @@ public class ForkConfiguration
 
     public static final String FORK_NEVER = "never";
 
+   public static final String FORK_PERTHREAD = "perThread";
+
+
+    private int threadCount;
+
     private final Classpath bootClasspathConfiguration;
 
     private final String forkMode;
@@ -96,7 +101,8 @@ public class ForkConfiguration
         {
             return FORK_NEVER;
         }
-        else if ( forkMode.equals( FORK_NEVER ) || forkMode.equals( FORK_ONCE ) || forkMode.equals( FORK_ALWAYS ) )
+        else if ( forkMode.equals( FORK_NEVER ) || forkMode.equals( FORK_ONCE ) ||
+          forkMode.equals( FORK_ALWAYS ) || forkMode.equals(FORK_PERTHREAD) )
         {
             return forkMode;
         }
@@ -301,5 +307,13 @@ public class ForkConfiguration
     public File getTempDirectory()
     {
         return tempDirectory;
+    }
+
+    public int getThreadCount() {
+      return threadCount;
+    }
+
+    public void setThreadCount(int threadCount) {
+      this.threadCount = threadCount;
     }
 }

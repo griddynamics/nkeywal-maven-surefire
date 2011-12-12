@@ -727,6 +727,12 @@ public abstract class AbstractSurefireMojo
                     setEnableAssertions( false );
                 }
             }
+
+          if (fork.getForkMode().equals(ForkConfiguration.FORK_PERTHREAD )){
+                fork.setThreadCount( getThreadCount()  );
+          } else {
+                fork.setThreadCount( 1 );
+          }
         }
         return fork;
     }

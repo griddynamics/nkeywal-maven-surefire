@@ -47,6 +47,7 @@ public class ConsoleOutputFileReporter
     private String reportEntryName;
 
     private final String reportNameSuffix;
+    private boolean completed=false;
 
     public ConsoleOutputFileReporter( File reportsDirectory )
     {
@@ -67,6 +68,7 @@ public class ConsoleOutputFileReporter
     public void testSetCompleted( ReportEntry report )
         throws ReporterException
     {
+      completed = true;
         if ( printWriter != null )
         {
             printWriter.close();
@@ -76,26 +78,24 @@ public class ConsoleOutputFileReporter
 
     public void writeMessage( byte[] b, int off, int len )
     {
-        try
-        {
-            if ( printWriter == null )
-            {
-                if ( !reportsDirectory.exists() )
-                {
-                    //noinspection ResultOfMethodCallIgnored
-                    reportsDirectory.mkdirs();
-                }
-                File file = AbstractFileReporter.getReportFile( reportsDirectory, reportEntryName, reportNameSuffix, "-output.txt" );
-                printWriter = new PrintWriter( new BufferedWriter( new FileWriter( file ) ) );
+      String toWrite = new String( b, off, len );
+      if (toWrite.length()>0)
+        try {
+          if (printWriter == null) {
+            if (!reportsDirectory.exists()) {
+              //noinspection ResultOfMethodCallIgnored
+              reportsDirectory.mkdirs();
             }
-            printWriter.write( new String( b, off, len ) );
-        }
-        catch ( IOException e )
-        {
-            throw new NestedRuntimeException( e );
+
+              File file = AbstractFileReporter.getReportFile(reportsDirectory, reportEntryName, reportNameSuffix, "-output.txt");
+              printWriter = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+          }
+
+            printWriter.write(toWrite);
+        } catch (IOException e) {
+          throw new NestedRuntimeException(e);
         }
     }
-
 
     public void testStarting( ReportEntry report )
     {

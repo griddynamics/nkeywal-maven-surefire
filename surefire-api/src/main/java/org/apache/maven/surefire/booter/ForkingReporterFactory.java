@@ -20,6 +20,9 @@ package org.apache.maven.surefire.booter;
  */
 
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+
 import org.apache.maven.surefire.report.ReporterFactory;
 import org.apache.maven.surefire.report.RunListener;
 import org.apache.maven.surefire.report.RunStatistics;
@@ -41,7 +44,21 @@ public class ForkingReporterFactory
 
     private final PrintStream originalSystemOut;
 
-    private volatile int testSetChannelId = 1;
+    private volatile static int testSetChannelId;
+
+  static {
+    RuntimeMXBean mx = ManagementFactory.getRuntimeMXBean();
+    String name = mx.getName();
+    if (name.indexOf('@') < 0) {
+      System.err.println("Can't get process pid, starting at 1");
+      testSetChannelId = 1;
+    } else {
+      String pidString = name.substring(0, name.indexOf('@') - 1);
+      testSetChannelId = Integer.parseInt(pidString);
+      testSetChannelId *= 100;
+      testSetChannelId = 1;
+    }
+  }
 
     public ForkingReporterFactory( Boolean trimstackTrace, PrintStream originalSystemOut )
     {
