@@ -237,19 +237,22 @@ public class ForkStarter
             {
                 throw new SurefireBooterForkException( "Error occurred in starting fork, check output in log" );
             }
-            threadedStreamConsumer.close();
-            forkClient.close();
 
-            runResult = globalRunStatistics.getRunResult();
         }
         catch ( CommandLineTimeOutException e )
         {
-            runResult = RunResult.Timeout;
+            return RunResult.Timeout;
         }
         catch ( CommandLineException e )
         {
             throw new SurefireBooterForkException( "Error while executing forked tests.", e.getCause() );
+        }  finally
+        {
+          threadedStreamConsumer.close();
+          forkClient.close();
         }
+
+        runResult = globalRunStatistics.getRunResult();
 
         return runResult;
     }
