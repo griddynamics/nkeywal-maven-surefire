@@ -48,7 +48,7 @@ public abstract class ConcurrentReporterManager
 
     private final ReporterFactory reporterFactory;
 
-    private final ConsoleLogger consoleLogger;
+    protected final ConsoleLogger consoleLogger;
 
     ConcurrentReporterManager( ReporterFactory reporterFactory, ConsoleLogger consoleLogger, boolean reportImmediately,
                                Map<String, TestSet> classMethodCounts )
@@ -117,7 +117,7 @@ public abstract class ConcurrentReporterManager
         detachTestMethodFromThread();
     }
 
-    private TestMethod getOrCreateTestMethod( ReportEntry description )
+    protected TestMethod getOrCreateTestMethod( ReportEntry description )
     {
         TestMethod threadTestMethod = TestMethod.getThreadTestMethod();
         if ( threadTestMethod != null )
@@ -180,8 +180,12 @@ public abstract class ConcurrentReporterManager
         {
             return new ClassesParallelRunListener( classMethodCounts, reporterManagerFactory, consoleLogger );
         }
+        if ( parallelBoth){
         return new MethodsParallelRunListener( classMethodCounts, reporterManagerFactory, !parallelBoth,
                                                consoleLogger );
+        }
+      return new NonConcurrentReporterManager( classMethodCounts, reporterManagerFactory,
+          consoleLogger );
     }
 
 
