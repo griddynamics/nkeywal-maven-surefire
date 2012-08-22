@@ -66,12 +66,21 @@ public class ConsoleOutputFileReporter
         close();
     }
 
+    FileWriter fw = null;
     public void close(){
-        if ( printWriter != null )
-        {
-            printWriter.close();
-            printWriter = null;
+      if ( printWriter != null )
+      {
+        printWriter.close();
+        printWriter = null;
+      }
+      if ( fw != null )
+      {
+        try {
+          fw.close();
+        } catch (IOException e) {
         }
+        fw = null;
+      }
     }
     public void writeTestOutput( byte[] buf, int off, int len, boolean stdout )
     {
@@ -86,7 +95,8 @@ public class ConsoleOutputFileReporter
                 }
                 File file =
                     FileReporter.getReportFile( reportsDirectory, reportEntryName, reportNameSuffix, "-output.txt" );
-                printWriter = new PrintWriter( new BufferedWriter( new FileWriter( file ) ) );
+               fw = new FileWriter( file );
+                printWriter = new PrintWriter( new BufferedWriter( fw ) );
             }
             printWriter.write( new String( buf, off, len ) );
         }
