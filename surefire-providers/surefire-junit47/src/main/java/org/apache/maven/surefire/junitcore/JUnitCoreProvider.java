@@ -130,6 +130,7 @@ public class JUnitCoreProvider
 
         RunListener listener = ConcurrentReporterManager.createInstance( testSetMap, reporterFactory,
                                                                          jUnitCoreParameters.isParallelClasses(),
+                                                                         jUnitCoreParameters.isParallelMethod(),
                                                                          jUnitCoreParameters.isParallelBoth(),
                                                                          consoleLogger );
 
