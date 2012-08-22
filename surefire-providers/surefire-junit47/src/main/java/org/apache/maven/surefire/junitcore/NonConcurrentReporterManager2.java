@@ -29,7 +29,7 @@ public class NonConcurrentReporterManager2 extends ClassesParallelRunListener {
     LogicalStream logicalStream;
     if ( threadTestMethod != null )
     {
-      logicalStream = threadTestMethod.getLogicalStream(); // logicalStream = threadTestMethod.getLogicalStream(preMethodlogicalStream);
+      logicalStream = threadTestMethod.getLogicalStream(preMethodlogicalStream);
       preMethodlogicalStream = null;
       postMethodlogicalStream = logicalStream;
     } else {
