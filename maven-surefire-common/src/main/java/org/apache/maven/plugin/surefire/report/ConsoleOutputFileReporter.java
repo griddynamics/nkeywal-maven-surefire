@@ -67,11 +67,20 @@ public class ConsoleOutputFileReporter
     }
 
     FileWriter fw = null;
+  BufferedWriter bw = null;
     public void close(){
       if ( printWriter != null )
       {
         printWriter.close();
         printWriter = null;
+      }
+      if ( bw != null )
+      {
+        try {
+          bw.close();
+        } catch (IOException e) {
+        }
+        bw = null;
       }
       if ( fw != null )
       {
@@ -96,7 +105,8 @@ public class ConsoleOutputFileReporter
                 File file =
                     FileReporter.getReportFile( reportsDirectory, reportEntryName, reportNameSuffix, "-output.txt" );
                fw = new FileWriter( file );
-                printWriter = new PrintWriter( new BufferedWriter( fw ) );
+               bw = new BufferedWriter( fw );
+                printWriter = new PrintWriter( bw );
             }
             printWriter.write( new String( buf, off, len ) );
         }
