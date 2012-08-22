@@ -22,13 +22,13 @@ package org.apache.maven.surefire.report;
 import org.apache.maven.surefire.suite.RunResult;
 
 /**
+ * Used by the providers to request (per-thread) run listeners.
  * @author Kristian Rosenvold
  */
 public interface ReporterFactory
 {
     /**
-     * Creates a reporter. The reporter is a singleton that is expected to be
-     * used in the provider.
+     * Creates a reporter.
      *
      * @return A reporter instance
      */
@@ -41,5 +41,4 @@ public interface ReporterFactory
      */
     RunResult close();
 
-    RunStatistics getGlobalRunStatistics();
 }

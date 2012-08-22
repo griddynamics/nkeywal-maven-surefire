@@ -19,10 +19,14 @@ package org.apache.maven.surefire.report;
  * under the License.
  */
 
-import java.io.File;
-import org.apache.maven.plugin.surefire.report.FileReporter;
-
 import junit.framework.TestCase;
+import org.apache.maven.plugin.surefire.report.FileReporter;
+import org.apache.maven.plugin.surefire.report.ReportEntryType;
+import org.apache.maven.plugin.surefire.report.TestSetStats;
+import org.apache.maven.plugin.surefire.report.WrappedReportEntry;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class FileReporterTest
     extends TestCase
@@ -34,15 +38,14 @@ public class FileReporterTest
 
     private static final String testName = "org.apache.maven.surefire.report.FileReporterTest";
 
-    /*
-     * Test method for 'org.codehaus.surefire.report.FileReporter.testSetStarting(ReportEntry report)'
-     */
     public void testFileNameWithoutSuffix()
     {
         File reportDir = new File( "target" );
         reportEntry = new SimpleReportEntry( this.getClass().getName(), testName );
-        reporter = new FileReporter( true, reportDir, null );
-        reporter.testSetStarting( reportEntry );
+        WrappedReportEntry wrappedReportEntry =
+            new WrappedReportEntry( reportEntry, ReportEntryType.success, 12, null, null );
+        reporter = new FileReporter( reportDir, null );
+        reporter.testSetCompleted( wrappedReportEntry, createTestSetStats(), new ArrayList<String>() );
 
         File expectedReportFile = new File( reportDir, testName + ".txt" );
         assertTrue( "Report file (" + expectedReportFile.getAbsolutePath() + ") doesn't exist",
@@ -50,16 +53,20 @@ public class FileReporterTest
         expectedReportFile.delete();
     }
 
-    /*
-     * Test method for 'org.codehaus.surefire.report.FileReporter.testSetStarting(ReportEntry report)'
-     */
+    private TestSetStats createTestSetStats()
+    {
+        return new TestSetStats( true, true );
+    }
+
     public void testFileNameWithSuffix()
     {
         File reportDir = new File( "target" );
         String suffixText = "sampleSuffixText";
         reportEntry = new SimpleReportEntry( this.getClass().getName(), testName );
-        reporter = new FileReporter( true, reportDir, suffixText );
-        reporter.testSetStarting( reportEntry );
+        WrappedReportEntry wrappedReportEntry =
+            new WrappedReportEntry( reportEntry, ReportEntryType.success, 12, null, null );
+        reporter = new FileReporter( reportDir, suffixText );
+        reporter.testSetCompleted( wrappedReportEntry, createTestSetStats(), new ArrayList<String>() );
 
         File expectedReportFile = new File( reportDir, testName + "-" + suffixText + ".txt" );
         assertTrue( "Report file (" + expectedReportFile.getAbsolutePath() + ") doesn't exist",

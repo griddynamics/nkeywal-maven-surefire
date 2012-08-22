@@ -48,6 +48,8 @@ public class RunResult
 
     public static final RunResult Timeout = new RunResult( 0, 0, 0, 0, false, true );
 
+    public static final RunResult Failure = new RunResult( 0, 0, 0, 0, true, false);
+
     public RunResult( int completedCount, int errors, int failures, int skipped )
     {
         this( completedCount, errors, failures, skipped, false, false );
@@ -136,5 +138,10 @@ public class RunResult
         int ign = getSkipped() + other.getSkipped();
         int err = getErrors() + other.getErrors();
         return new RunResult( completed, err, fail, ign, failure, timeout );
+    }
+
+    public static RunResult noTestsRun()
+    {
+        return new RunResult( 0, 0, 0, 0 );
     }
 }

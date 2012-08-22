@@ -1,4 +1,4 @@
-package org.apache.maven.surefire.report;
+package org.apache.maven.plugin.surefire;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +18,24 @@ package org.apache.maven.surefire.report;
  * under the License.
  */
 
+import org.apache.maven.surefire.booter.Classpath;
+
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author Kristian Rosenvold
  */
-public class DescriptionDecoder
+public class ClasspathCache
 {
-    public String getReportName( ReportEntry report )
+    private static final ConcurrentHashMap<String, Classpath> classpaths =
+        new ConcurrentHashMap<String, Classpath>( 4 );
+
+    public static Classpath getCachedClassPath( String artifactId )
     {
-        final int i = report.getName().lastIndexOf( "(" );
-        return i > 0 ? report.getName().substring( 0, i ) : report.getName();
+        return classpaths.get( artifactId );
+    }
+
+    public static void setCachedClasspath(String key, Classpath classpath){
+        classpaths.put(key, classpath);
     }
 }

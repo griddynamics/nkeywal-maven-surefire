@@ -1,5 +1,4 @@
-package org.apache.maven.plugin.surefire.report;
-
+package org.apache.maven.surefire.booter;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,18 +18,12 @@ package org.apache.maven.plugin.surefire.report;
  * under the License.
  */
 
-/**
- * Detailed console reporter.
- *
- * @author <a href="mailto:jruiz@exist.com">Johnny R. Ruiz III</a>
- * @version $Id$
- */
-public class DetailedConsoleReporter
-    extends AbstractConsoleReporter
-{
+import java.util.Map;
 
-    public DetailedConsoleReporter( boolean trimStackTrace )
-    {
-        super( trimStackTrace, PLAIN );
-    }
+/**
+ * A key-value source obeying the geneal constrains of java.util.Properties
+ */
+public interface KeyValueSource
+{
+    void copyTo( Map target );
 }

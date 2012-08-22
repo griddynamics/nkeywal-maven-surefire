@@ -19,21 +19,17 @@ package org.apache.maven.plugin.surefire;
  * under the License.
  */
 
+import org.apache.maven.plugin.surefire.report.ConsoleOutputFileReporter;
+import org.apache.maven.plugin.surefire.report.ConsoleReporter;
+import org.apache.maven.plugin.surefire.report.DirectConsoleOutput;
+import org.apache.maven.plugin.surefire.report.FileReporter;
+import org.apache.maven.plugin.surefire.report.StatelessXmlReporter;
+import org.apache.maven.plugin.surefire.report.TestcycleConsoleOutputReceiver;
+import org.apache.maven.plugin.surefire.runorder.StatisticsReporter;
+
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Properties;
-import org.apache.maven.plugin.surefire.report.AbstractConsoleReporter;
-import org.apache.maven.plugin.surefire.report.AbstractFileReporter;
-import org.apache.maven.plugin.surefire.report.BriefConsoleReporter;
-import org.apache.maven.plugin.surefire.report.BriefFileReporter;
-import org.apache.maven.plugin.surefire.report.ConsoleOutputDirectReporter;
-import org.apache.maven.plugin.surefire.report.ConsoleOutputFileReporter;
-import org.apache.maven.plugin.surefire.report.ConsoleReporter;
-import org.apache.maven.plugin.surefire.report.DetailedConsoleReporter;
-import org.apache.maven.plugin.surefire.report.FileReporter;
-import org.apache.maven.plugin.surefire.report.Reporter;
-import org.apache.maven.plugin.surefire.report.XMLReporter;
-import org.apache.maven.plugin.surefire.runorder.StatisticsReporter;
 
 /**
  * All the parameters used to construct reporters
@@ -43,6 +39,10 @@ import org.apache.maven.plugin.surefire.runorder.StatisticsReporter;
  */
 public class StartupReportConfiguration
 {
+    private final PrintStream originalSystemOut;
+
+    private final PrintStream originalSystemErr;
+
     private final boolean useFile;
 
     private final boolean printSummary;
@@ -65,9 +65,9 @@ public class StartupReportConfiguration
 
     private final Properties testVmSystemProperties = new Properties();
 
-    public static final String BRIEF_REPORT_FORMAT = "brief";
+    public static final String BRIEF_REPORT_FORMAT = ConsoleReporter.BRIEF;
 
-    public static final String PLAIN_REPORT_FORMAT = "plain";
+    public static final String PLAIN_REPORT_FORMAT = ConsoleReporter.PLAIN;
 
     public StartupReportConfiguration( boolean useFile, boolean printSummary, String reportFormat,
                                        boolean redirectTestOutputToFile, boolean disableXmlReport,
@@ -84,6 +84,8 @@ public class StartupReportConfiguration
         this.reportNameSuffix = reportNameSuffix;
         this.configurationHash = configurationHash;
         this.requiresRunHistory = requiresRunHistory;
+        this.originalSystemOut = System.out;
+        this.originalSystemErr = System.err;
     }
 
     public static StartupReportConfiguration defaultValue()
@@ -135,50 +137,54 @@ public class StartupReportConfiguration
         return reportsDirectory;
     }
 
-    public XMLReporter instantiateXmlReporter()
+    public StatelessXmlReporter instantiateStatelessXmlReporter()
     {
         if ( !isDisableXmlReport() )
         {
-            return new XMLReporter( trimStackTrace, reportsDirectory, reportNameSuffix );
+            return new StatelessXmlReporter( reportsDirectory, reportNameSuffix, trimStackTrace );
         }
         return null;
     }
 
-    public AbstractFileReporter instantiateFileReporter()
+    public FileReporter instantiateFileReporter()
     {
         if ( isUseFile() )
         {
             if ( BRIEF_REPORT_FORMAT.equals( getReportFormat() ) )
             {
-                return new BriefFileReporter( trimStackTrace, reportsDirectory, getReportNameSuffix() );
+                return new FileReporter( reportsDirectory, getReportNameSuffix() );
             }
             else if ( PLAIN_REPORT_FORMAT.equals( getReportFormat() ) )
             {
-                return new FileReporter( trimStackTrace, reportsDirectory, getReportNameSuffix() );
+                return new FileReporter( reportsDirectory, getReportNameSuffix() );
             }
         }
         return null;
     }
 
+    public boolean isBriefOrPlainFormat()
+    {
+        return BRIEF_REPORT_FORMAT.equals( getReportFormat() ) || PLAIN_REPORT_FORMAT.equals( getReportFormat() );
+    }
 
-    public AbstractConsoleReporter instantiateConsoleReporter()
+    public ConsoleReporter instantiateConsoleReporter()
     {
         if ( isUseFile() )
         {
-            return isPrintSummary() ? new ConsoleReporter( trimStackTrace ) : null;
+            return isPrintSummary() ? new ConsoleReporter() : null;
         }
         else if ( isRedirectTestOutputToFile() || BRIEF_REPORT_FORMAT.equals( getReportFormat() ) )
         {
-            return new BriefConsoleReporter( trimStackTrace );
+            return new ConsoleReporter();
         }
         else if ( PLAIN_REPORT_FORMAT.equals( getReportFormat() ) )
         {
-            return new DetailedConsoleReporter( trimStackTrace );
+            return new ConsoleReporter();
         }
         return null;
     }
 
-    public Reporter instantiateConsoleOutputFileReporter( PrintStream originalSystemOut )
+    public TestcycleConsoleOutputReceiver instantiateConsoleOutputFileReporter()
     {
         if ( isRedirectTestOutputToFile() )
         {
@@ -186,7 +192,7 @@ public class StartupReportConfiguration
         }
         else
         {
-            return new ConsoleOutputDirectReporter( originalSystemOut );
+            return new DirectConsoleOutput( originalSystemOut, originalSystemErr );
         }
     }
 
@@ -226,4 +232,10 @@ public class StartupReportConfiguration
     {
         return requiresRunHistory;
     }
+
+    public PrintStream getOriginalSystemOut()
+    {
+        return originalSystemOut;
+    }
+
 }

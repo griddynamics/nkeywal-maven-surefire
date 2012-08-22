@@ -79,7 +79,7 @@ public class BooterDeserializerStartupConfigurationTest
     private Properties getPropertiesForClasspathConfiguration( ClasspathConfiguration configuration )
     {
         Properties properties = new Properties();
-        configuration.setForkProperties( new PropertiesWrapper( properties ) );
+        configuration.addForkProperties( new PropertiesWrapper( properties ) );
         return properties;
     }
 
@@ -127,12 +127,10 @@ public class BooterDeserializerStartupConfigurationTest
         throws IOException
     {
         final ForkConfiguration forkConfiguration = ForkConfigurationTest.getForkConfiguration( null, null );
-        Properties props = new Properties();
-        BooterSerializer booterSerializer = new BooterSerializer( forkConfiguration, props );
+        PropertiesWrapper props = new PropertiesWrapper( new Properties());
+        BooterSerializer booterSerializer = new BooterSerializer( forkConfiguration );
         String aTest = "aTest";
-        booterSerializer.serialize( getProviderConfiguration(), startupConfiguration, aTest);
-        final File propsTest =
-            SystemPropertyManager.writePropertiesFile( props, forkConfiguration.getTempDirectory(), "propsTest", true );
+        final File propsTest  = booterSerializer.serialize( props, getProviderConfiguration(), startupConfiguration, aTest);
         BooterDeserializer booterDeserializer = new BooterDeserializer( new FileInputStream( propsTest ) );
         return booterDeserializer.getProviderConfiguration();
     }

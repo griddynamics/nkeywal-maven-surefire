@@ -19,17 +19,16 @@ package org.apache.maven.plugin.surefire.runorder;
  * under the License.
  */
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import org.apache.maven.plugin.surefire.report.Reporter;
 import org.apache.maven.surefire.report.ReportEntry;
 import org.apache.maven.surefire.util.NestedRuntimeException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * @author Kristian Rosenvold
  */
 public class StatisticsReporter
-    implements Reporter
 {
     private final RunEntryStatisticsMap existing;
 
@@ -44,11 +43,7 @@ public class StatisticsReporter
         this.newResults = new RunEntryStatisticsMap();
     }
 
-    public void testSetStarting( ReportEntry report )
-    {
-    }
-
-    public void testSetCompleted( ReportEntry report )
+    public void testSetCompleted()
     {
         try
         {
@@ -58,10 +53,6 @@ public class StatisticsReporter
         {
             throw new NestedRuntimeException( e );
         }
-    }
-
-    public void testStarting( ReportEntry report )
-    {
     }
 
     public void testSucceeded( ReportEntry report )
@@ -74,25 +65,13 @@ public class StatisticsReporter
         newResults.add( existing.createNextGeneration( report ) );
     }
 
-    public void testError( ReportEntry report, String stdOut, String stdErr )
+    public void testError( ReportEntry report )
     {
         newResults.add( existing.createNextGenerationFailure( report ) );
     }
 
-    public void testFailed( ReportEntry report, String stdOut, String stdErr )
+    public void testFailed( ReportEntry report )
     {
         newResults.add( existing.createNextGenerationFailure( report ) );
-    }
-
-    public void writeMessage( String message )
-    {
-    }
-
-    public void writeMessage( byte[] b, int off, int len )
-    {
-    }
-
-    public void reset()
-    {
     }
 }
