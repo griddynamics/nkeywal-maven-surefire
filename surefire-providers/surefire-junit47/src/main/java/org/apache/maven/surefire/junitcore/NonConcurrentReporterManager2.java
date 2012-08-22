@@ -1,12 +1,8 @@
 package org.apache.maven.surefire.junitcore;
 
 
-import org.apache.maven.surefire.common.junit4.JUnit4RunListener;
 import org.apache.maven.surefire.report.ConsoleLogger;
-import org.apache.maven.surefire.report.ConsoleOutputCapture;
-import org.apache.maven.surefire.report.ConsoleOutputReceiver;
 import org.apache.maven.surefire.report.ReporterFactory;
-import org.apache.maven.surefire.report.RunListener;
 import org.apache.maven.surefire.testset.TestSetFailedException;
 
 import java.util.Map;
@@ -48,5 +44,6 @@ public class NonConcurrentReporterManager2 extends ClassesParallelRunListener {
 
   public NonConcurrentReporterManager2(Map<String, TestSet> classMethodCounts, ReporterFactory reporterFactory, ConsoleLogger consoleLogger) throws TestSetFailedException {
     super(classMethodCounts, reporterFactory, consoleLogger);
+    System.out.println("NonConcurrentReporterManager2");
   }
 }

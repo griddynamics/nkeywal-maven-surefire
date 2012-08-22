@@ -172,7 +172,8 @@ public abstract class ConcurrentReporterManager
                                                             ConsoleLogger consoleLogger )
         throws TestSetFailedException
     {
-        if ( parallelClasses )
+      System.out.println("createInstance "+parallelClasses+" "+parallelMethods+" "+parallelBoth );
+      if ( parallelClasses )
         {
             return new ClassesParallelRunListener( classMethodCounts, reporterManagerFactory, consoleLogger );
         }
