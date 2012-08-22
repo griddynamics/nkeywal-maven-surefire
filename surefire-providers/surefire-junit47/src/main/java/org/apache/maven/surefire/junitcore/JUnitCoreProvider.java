@@ -124,6 +124,8 @@ public class JUnitCoreProvider
             filter = null;
         }
 
+      org.junit.runner.notification.RunListener jUnit4RunListener;
+
         final Map<String, TestSet> testSetMap = new ConcurrentHashMap<String, TestSet>();
 
         RunListener listener = ConcurrentReporterManager.createInstance( testSetMap, reporterFactory,
@@ -133,10 +135,14 @@ public class JUnitCoreProvider
 
         ConsoleOutputCapture.startCapture( (ConsoleOutputReceiver) listener );
 
-        org.junit.runner.notification.RunListener jUnit4RunListener = new JUnitCoreRunListener( listener, testSetMap );
-        customRunListeners.add( 0, jUnit4RunListener );
-
-        JUnitCoreWrapper.execute( testsToRun, jUnitCoreParameters, customRunListeners, filter );
+        jUnit4RunListener = new JUnitCoreRunListener( listener, testSetMap );
+          /*
+      RunListener reporter = reporterFactory.createReporter();
+      ConsoleOutputCapture.startCapture((ConsoleOutputReceiver) reporter);
+      jUnit4RunListener = new NonConcurrentReporterManager2(reporter);
+             */
+      customRunListeners.add( 0, jUnit4RunListener );
+      JUnitCoreWrapper.execute( testsToRun, jUnitCoreParameters, customRunListeners, filter );
         return reporterFactory.close();
     }
 

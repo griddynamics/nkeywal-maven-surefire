@@ -35,9 +35,19 @@ public class ClassDemarcatingRunner
 
     private final Class testClass;
 
+    private static Class<?> lastRunning = null;
     private static final ThreadLocal<Class> currentlyRunning = new ThreadLocal<Class>();
 
-    public ClassDemarcatingRunner( Runner target, Class testClass )
+
+    public static Class<?> getLastRunning() {
+      return lastRunning;
+    }
+
+    public static void setLastRunning(Class<?> p) {
+      lastRunning = p;
+    }
+
+  public ClassDemarcatingRunner( Runner target, Class testClass )
     {
         this.target = target;
         this.testClass = testClass;
@@ -66,6 +76,7 @@ public class ClassDemarcatingRunner
     public static String getCurrentTestClass()
     {
         Class aClass = currentlyRunning.get();
+      if (aClass == null) aClass = lastRunning;
         return aClass != null ? aClass.getName() : null;
     }
 }
