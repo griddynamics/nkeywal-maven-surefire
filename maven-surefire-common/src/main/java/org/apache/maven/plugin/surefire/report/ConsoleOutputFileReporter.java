@@ -63,6 +63,7 @@ public class ConsoleOutputFileReporter
     public void testSetCompleted( ReportEntry report )
         throws ReporterException
     {
+        close();
     }
 
     public void close(){
