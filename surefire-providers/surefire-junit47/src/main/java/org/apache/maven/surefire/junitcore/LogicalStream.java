@@ -31,7 +31,7 @@ public class LogicalStream
 {
     private final List<Entry> output = new ArrayList<Entry>();
 
-    class Entry
+    public static class Entry
     {
         final boolean stdout;
 
@@ -41,7 +41,7 @@ public class LogicalStream
 
         final int len;
 
-        Entry( boolean stdout, byte[] b, int off, int len )
+        public Entry( boolean stdout, byte[] b, int off, int len )
         {
             this.stdout = stdout;
             this.b = ByteBuffer.copy( b, off, len );
