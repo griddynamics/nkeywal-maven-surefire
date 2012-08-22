@@ -10,7 +10,13 @@ import org.apache.maven.surefire.testset.TestSetFailedException;
 
 import java.util.Map;
 
+/**
+ * A class to be used when there is no JUnit parallelism (methods or/and class). This
+ *  allow to workaround JUnit limitation a la Junit4 provider. Specifically, we can redirect
+ *  properly the output even if we don't have class demarcation in JUnit.
+ */
 public class NonConcurrentReporterManager extends ClassesParallelRunListener {
+  private RunListener runListener;
 
   @Override
   public synchronized void writeTestOutput( byte[] buf, int off, int len, boolean stdout )
@@ -19,7 +25,6 @@ public class NonConcurrentReporterManager extends ClassesParallelRunListener {
   }
 
 
-  private RunListener runListener;
   @Override
   RunListener getRunListener()
   {
