@@ -48,7 +48,7 @@ public abstract class ConcurrentReporterManager
 
     private final ReporterFactory reporterFactory;
 
-    protected final ConsoleLogger consoleLogger;
+    private final ConsoleLogger consoleLogger;
 
     ConcurrentReporterManager( ReporterFactory reporterFactory, ConsoleLogger consoleLogger, boolean reportImmediately,
                                Map<String, TestSet> classMethodCounts )
@@ -117,7 +117,7 @@ public abstract class ConcurrentReporterManager
         detachTestMethodFromThread();
     }
 
-    protected TestMethod getOrCreateTestMethod( ReportEntry description )
+    private TestMethod getOrCreateTestMethod( ReportEntry description )
     {
         TestMethod threadTestMethod = TestMethod.getThreadTestMethod();
         if ( threadTestMethod != null )
