@@ -53,7 +53,7 @@ import org.junit.runner.manipulation.Filter;
  */
 @SuppressWarnings( { "UnusedDeclaration" } )
 public class JUnitCoreProvider
-        extends AbstractProvider
+    extends AbstractProvider
 {
     private final ClassLoader testClassLoader;
 
@@ -87,7 +87,7 @@ public class JUnitCoreProvider
         this.requestedTestMethod = providerParameters.getTestRequest().getRequestedTestMethod();
 
         customRunListeners = JUnit4RunListenerFactory.
-                createCustomListeners( providerParameters.getProviderProperties().getProperty( "listener" ) );
+            createCustomListeners( providerParameters.getProviderProperties().getProperty( "listener" ) );
         jUnit48Reflector = new JUnit48Reflector( testClassLoader );
     }
 
@@ -104,9 +104,10 @@ public class JUnitCoreProvider
     }
 
     public RunResult invoke( Object forkTestSet )
-            throws TestSetFailedException, ReporterException
+        throws TestSetFailedException, ReporterException
     {
         final ReporterFactory reporterFactory = providerParameters.getReporterFactory();
+
         final ConsoleLogger consoleLogger = providerParameters.getConsoleLogger();
 
         Filter filter = jUnit48Reflector.isJUnit48Available() ? createJUnit48Filter() : null;
@@ -124,10 +125,10 @@ public class JUnitCoreProvider
         final Map<String, TestSet> testSetMap = new ConcurrentHashMap<String, TestSet>();
 
         RunListener listener = ConcurrentReporterManager.createInstance( testSetMap, reporterFactory,
-                jUnitCoreParameters.isParallelClasses(),
-                jUnitCoreParameters.isParallelBoth(),
-                (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod(),
-                consoleLogger );
+                                                                         jUnitCoreParameters.isParallelClasses(),
+                                                                         jUnitCoreParameters.isParallelBoth(),
+                                                                         (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod(),
+                                                                         consoleLogger );
 
         ConsoleOutputCapture.startCapture( (ConsoleOutputReceiver) listener );
 
@@ -163,7 +164,7 @@ public class JUnitCoreProvider
                 for ( Method method : clazz.getMethods() )
                 {
                     final Description testDescription =
-                            Description.createTestDescription( clazz, method.getName(), method.getAnnotations() );
+                        Description.createTestDescription( clazz, method.getName(), method.getAnnotations() );
                     if ( filter.shouldRun( testDescription ) )
                     {
                         res.add( clazz );
@@ -179,8 +180,8 @@ public class JUnitCoreProvider
     {
         final FilterFactory filterFactory = new FilterFactory( testClassLoader );
         return isMethodFilterSpecified()
-                ? filterFactory.createMethodFilter( requestedTestMethod )
-                : filterFactory.createGroupFilter( providerParameters.getProviderProperties() );
+            ? filterFactory.createMethodFilter( requestedTestMethod )
+            : filterFactory.createGroupFilter( providerParameters.getProviderProperties() );
     }
 
     private TestsToRun scanClassPath()
