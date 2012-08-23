@@ -87,7 +87,7 @@ public class JUnitCoreProvider
         this.requestedTestMethod = providerParameters.getTestRequest().getRequestedTestMethod();
 
         customRunListeners = JUnit4RunListenerFactory.
-            createCustomListeners( providerParameters.getProviderProperties().getProperty("listener") );
+            createCustomListeners( providerParameters.getProviderProperties().getProperty( "listener" ) );
         jUnit48Reflector = new JUnit48Reflector( testClassLoader );
     }
 
