@@ -125,9 +125,7 @@ public class JUnitCoreProvider
         org.junit.runner.notification.RunListener jUnit4RunListener;
         if ( (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod() ){
             NonConcurrentReporterManager rm = new NonConcurrentReporterManager(reporterFactory, consoleLogger);
-            System.out.println("CCC before startCapture");
             ConsoleOutputCapture.startCapture( rm );
-            System.out.println("CCC after startCapture");
             jUnit4RunListener = rm;
         }
         else
@@ -143,9 +141,7 @@ public class JUnitCoreProvider
             jUnit4RunListener = new JUnitCoreRunListener(listener, testSetMap);
         }
         customRunListeners.add( 0, jUnit4RunListener );
-        System.out.println("CCC before execute ");
         JUnitCoreWrapper.execute( testsToRun, jUnitCoreParameters, customRunListeners, filter );
-        System.out.println("CCC after execute ");
         return reporterFactory.close();
     }
 

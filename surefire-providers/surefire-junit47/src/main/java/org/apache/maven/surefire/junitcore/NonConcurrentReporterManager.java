@@ -36,6 +36,9 @@ import java.util.regex.Matcher;
  * if there is a JVM instance per test run, i.e. with forkMode=always or perthread.
  */
 public class NonConcurrentReporterManager extends JUnit4RunListener implements ConsoleOutputReceiver {
+    private ConsoleLogger consoleLogger;
+    private long startTime;
+    private SimpleReportEntry report;
 
     public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
         // We can write immediately: no parallelism and a single class.
@@ -52,8 +55,6 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         return new SimpleReportEntry( classNameToUse, classNameToUse, 0 );
     }
 
-    private long startTime;
-    private SimpleReportEntry report;
     @Override
     public void testRunStarted( Description description )
             throws Exception
@@ -72,7 +73,6 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         reporter.testSetCompleted( sre );
     }
 
-    ConsoleLogger consoleLogger;
     public NonConcurrentReporterManager(ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
         super(reporterFactory.createReporter());
