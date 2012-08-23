@@ -22,11 +22,8 @@ package org.apache.maven.surefire.junitcore;
 import java.util.ArrayList;
 import java.util.Map;
 import org.apache.maven.surefire.common.junit4.JUnit4RunListener;
-import org.apache.maven.surefire.report.ReportEntry;
 import org.apache.maven.surefire.report.RunListener;
 
-import org.apache.maven.surefire.report.SimpleReportEntry;
-import org.apache.maven.surefire.report.StackTraceWriter;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 
@@ -50,39 +47,11 @@ public class JUnitCoreRunListener
      *
      * @see org.junit.runner.notification.RunListener#testRunStarted(org.junit.runner.Description)
      */
-    public void testRunStarted( final Description description )
+    public void testRunStarted( Description description )
         throws Exception
     {
         fillTestCountMap( description );
-
-      ReportEntry re = new ReportEntry() {
-        public String getSourceName() {
-          return description.getMethodName();
-        }
-
-        public String getName() {
-          return description.getClassName();
-        }
-
-        public String getGroup() {
-          return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public StackTraceWriter getStackTraceWriter() {
-          return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public Integer getElapsed() {
-          return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        public String getMessage() {
-          return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-      };
-
-
-      reporter.testSetStarting( re ); // Not entirely meaningful as we can see
+        reporter.testSetStarting( null ); // Not entirely meaningful as we can see
     }
 
     @Override
