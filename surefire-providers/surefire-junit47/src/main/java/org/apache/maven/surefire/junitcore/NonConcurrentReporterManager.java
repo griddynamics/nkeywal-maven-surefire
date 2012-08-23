@@ -25,7 +25,6 @@ import org.apache.maven.surefire.testset.TestSetFailedException;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 
-
 /**
  * A class to be used when there is no JUnit parallelism (methods or/and class). This
  * allow to workaround JUnit limitation a la Junit4 provider. Specifically, we can redirect
@@ -41,6 +40,26 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         // We can write immediately: no parallelism and a single class.
         ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
         //consoleLogger.info( new String( buf, off, len ) );
+    }
+
+    @Override
+    protected SimpleReportEntry createReportEntry( Description description )
+    {
+        boolean isJunit3 = description.getTestClass() == null;
+        String classNameToUse = "no-class-name-for-"+description.getDisplayName();
+        if ( !isJunit3 )
+        {
+            classNameToUse = description.getClassName();
+        }
+        else
+        {
+            if ( !description.getChildren().isEmpty() )
+            {
+                classNameToUse = description.getChildren().get( 0 ).getClassName();
+            }
+        }
+
+        return new SimpleReportEntry( classNameToUse, classNameToUse, 0 );
     }
 
     @Override
