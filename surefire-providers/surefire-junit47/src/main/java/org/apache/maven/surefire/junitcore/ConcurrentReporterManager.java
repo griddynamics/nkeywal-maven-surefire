@@ -165,7 +165,7 @@ public abstract class ConcurrentReporterManager
         return runListener;
     }
 
-    public static RunListener createInstance( Map<String, TestSet> classMethodCounts,
+    public static ConcurrentReporterManager createInstance( Map<String, TestSet> classMethodCounts,
                                                             ReporterFactory reporterManagerFactory,
                                                             boolean parallelClasses, boolean parallelBoth,
                                                             ConsoleLogger consoleLogger )
