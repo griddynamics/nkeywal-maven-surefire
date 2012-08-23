@@ -52,12 +52,13 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         return new SimpleReportEntry( classNameToUse, classNameToUse, 0 );
     }
 
-
-    ReportEntry report;
+    private long startTime;
+    private SimpleReportEntry report;
     @Override
     public void testRunStarted( Description description )
             throws Exception
     {
+        startTime = System.currentTimeMillis();
         report = createReportEntry( description );
         reporter.testSetStarting( report );
     }
@@ -66,6 +67,8 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public void testRunFinished( Result result )
             throws Exception
     {
+        final long elapsed = System.currentTimeMillis() - startTime;
+        SimpleReportEntry sre = new SimpleReportEntry( report.getSourceName(), report.getName(), (int)elapsed);
         reporter.testSetCompleted( report );
     }
 
