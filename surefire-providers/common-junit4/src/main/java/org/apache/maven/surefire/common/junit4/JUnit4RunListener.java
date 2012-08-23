@@ -135,7 +135,7 @@ public class JUnit4RunListener
         }
     }
 
-    private SimpleReportEntry createReportEntry( Description description )
+    protected SimpleReportEntry createReportEntry( Description description )
     {
         return new SimpleReportEntry( extractClassName( description ), description.getDisplayName() );
     }
