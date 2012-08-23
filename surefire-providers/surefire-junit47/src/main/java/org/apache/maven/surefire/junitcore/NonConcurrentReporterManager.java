@@ -49,6 +49,19 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         return description.getClassName();
     }
 
+    public void testRunStarted( Description description )
+            throws Exception
+    {
+        reporter.testSetStarting( null ); // Not entirely meaningful as we can see
+    }
+
+    @Override
+    public void testRunFinished( Result result )
+            throws Exception
+    {
+        reporter.testSetCompleted( null );
+    }
+
 
     public NonConcurrentReporterManager(ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
