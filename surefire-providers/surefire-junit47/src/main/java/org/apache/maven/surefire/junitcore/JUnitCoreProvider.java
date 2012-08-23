@@ -129,7 +129,6 @@ public class JUnitCoreProvider
                                                                          jUnitCoreParameters.isParallelBoth(),
                                                                          (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod(),
                                                                          consoleLogger );
-        System.out.println("testsToRun.size="+testsToRun.size()+ " jUnitCoreParameters.isParallelMethod="+jUnitCoreParameters.isParallelMethod());
         ConsoleOutputCapture.startCapture( (ConsoleOutputReceiver) listener );
 
         org.junit.runner.notification.RunListener jUnit4RunListener = new JUnitCoreRunListener( listener, testSetMap );

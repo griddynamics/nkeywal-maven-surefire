@@ -34,8 +34,13 @@ import java.util.Map;
  * properly the output even if we don't have class demarcation in JUnit. It works when
  * if there is a JVM instance per test run, i.e. with forkMode=always or perthread.
  */
-public class NonConcurrentReporterManager extends ClassesParallelRunListener {
+public class NonConcurrentReporterManager extends ConcurrentReporterManager {
     private RunListener runListener;
+
+    @Override
+    protected void checkIfTestSetCanBeReported(TestSet testSetForTest) {
+        testSetForTest.setAllScheduled( getRunListener() );
+    }
 
     /**
      * Return the runListener. There is only one for the test, as it's used when there is only one class test
@@ -56,7 +61,7 @@ public class NonConcurrentReporterManager extends ClassesParallelRunListener {
 
     public NonConcurrentReporterManager(Map<String, TestSet> classMethodCounts, ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
-        super(classMethodCounts, reporterFactory, consoleLogger);
+        super(reporterFactory, consoleLogger, true, classMethodCounts);
         runListener = reporterFactory.createReporter();
     }
 }
