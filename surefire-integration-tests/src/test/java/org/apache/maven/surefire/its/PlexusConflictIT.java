@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class PlexusConflictIT
+class PlexusConflictIT
     extends SurefireIntegrationTestCase
 {
     public void testPlexusConflict()

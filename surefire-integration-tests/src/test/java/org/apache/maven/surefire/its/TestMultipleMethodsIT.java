@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:ytsolar@gmail.com">rainLee</a>
  */
-public class TestMultipleMethodsIT
+class TestMultipleMethodsIT
     extends SurefireIntegrationTestCase
 {
     public void multipleMethod( String projectName )

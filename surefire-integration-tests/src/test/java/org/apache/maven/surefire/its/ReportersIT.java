@@ -28,7 +28,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class ReportersIT
+class ReportersIT
     extends SurefireIntegrationTestCase
 {
     public void testRedirectOutputTestNg()

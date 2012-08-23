@@ -28,7 +28,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  *
  * @author Kristian Rosenvold
  */
-public class ConsoleOutputIT
+class ConsoleOutputIT
     extends SurefireIntegrationTestCase
 {
     public void testProperNewlines()

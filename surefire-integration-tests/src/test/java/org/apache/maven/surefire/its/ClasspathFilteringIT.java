@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author pgier
  */
-public class ClasspathFilteringIT
+class ClasspathFilteringIT
     extends SurefireIntegrationTestCase
 {
     public void testAdditionalClasspath()

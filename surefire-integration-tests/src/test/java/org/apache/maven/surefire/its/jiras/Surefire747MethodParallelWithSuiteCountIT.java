@@ -25,7 +25,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
 /**
  * @author Kristian Rosenvold
  */
-public class Surefire747MethodParallelWithSuiteCountIT
+class Surefire747MethodParallelWithSuiteCountIT
     extends SurefireIntegrationTestCase
 {
 

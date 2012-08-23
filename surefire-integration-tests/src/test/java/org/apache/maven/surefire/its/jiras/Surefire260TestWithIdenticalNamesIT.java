@@ -36,7 +36,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire260TestWithIdenticalNamesIT
+class Surefire260TestWithIdenticalNamesIT
     extends SurefireIntegrationTestCase
 {
 

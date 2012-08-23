@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class SystemPropertiesTestIT
+class SystemPropertiesTestIT
     extends SurefireIntegrationTestCase
 {
 

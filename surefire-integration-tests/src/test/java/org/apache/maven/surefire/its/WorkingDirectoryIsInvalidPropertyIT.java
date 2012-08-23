@@ -7,7 +7,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:krosenvold@apache.org">Kristian Rosenvold</a>
  */
-public class WorkingDirectoryIsInvalidPropertyIT
+class WorkingDirectoryIsInvalidPropertyIT
     extends SurefireIntegrationTestCase
 {
     public void testWorkingDirectory()

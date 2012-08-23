@@ -30,7 +30,7 @@ import org.junit.experimental.categories.Category;
  * @author Kristian Rosenvold
  */
 @Category( Not2xCompatible.class)
-public class Surefire735ForkFailWithRedirectConsoleOutputIT
+class Surefire735ForkFailWithRedirectConsoleOutputIT
     extends SurefireJUnit4IntegrationTestCase
 {
 

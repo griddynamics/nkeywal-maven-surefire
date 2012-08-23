@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold       assertContainsText
  */
-public class Surefire628ConsoleOutputBeforeAndAfterClassIT
+class Surefire628ConsoleOutputBeforeAndAfterClassIT
     extends SurefireIntegrationTestCase
 {
 

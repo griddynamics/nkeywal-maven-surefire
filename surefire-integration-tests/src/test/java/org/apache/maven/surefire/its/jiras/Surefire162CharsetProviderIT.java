@@ -30,7 +30,7 @@ import org.codehaus.plexus.util.FileUtils;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class Surefire162CharsetProviderIT
+class Surefire162CharsetProviderIT
     extends SurefireIntegrationTestCase
 {
     @SuppressWarnings( { "ResultOfMethodCallIgnored" } )

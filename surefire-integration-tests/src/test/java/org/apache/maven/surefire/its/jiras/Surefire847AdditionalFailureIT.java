@@ -2,7 +2,7 @@ package org.apache.maven.surefire.its.jiras;
 
 import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
 
-public class Surefire847AdditionalFailureIT
+class Surefire847AdditionalFailureIT
     extends SurefireIntegrationTestCase
 {
     public void testJUnitRunCategoryAB()

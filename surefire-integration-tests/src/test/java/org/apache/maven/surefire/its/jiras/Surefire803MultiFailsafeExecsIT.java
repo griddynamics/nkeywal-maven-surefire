@@ -3,7 +3,7 @@ package org.apache.maven.surefire.its.jiras;
 import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
 import org.apache.maven.surefire.its.fixture.SurefireLauncher;
 
-public class Surefire803MultiFailsafeExecsIT
+class Surefire803MultiFailsafeExecsIT
     extends SurefireIntegrationTestCase
 {
 

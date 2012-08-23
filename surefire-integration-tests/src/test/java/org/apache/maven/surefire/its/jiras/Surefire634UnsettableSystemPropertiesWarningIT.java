@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire634UnsettableSystemPropertiesWarningIT
+class Surefire634UnsettableSystemPropertiesWarningIT
     extends SurefireIntegrationTestCase
 {
     public void testJunit3ParallelBuildResultCount()

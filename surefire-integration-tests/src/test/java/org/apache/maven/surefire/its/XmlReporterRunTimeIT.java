@@ -31,7 +31,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class XmlReporterRunTimeIT
+class XmlReporterRunTimeIT
     extends SurefireIntegrationTestCase
 {
     public void testForkModeAlways()

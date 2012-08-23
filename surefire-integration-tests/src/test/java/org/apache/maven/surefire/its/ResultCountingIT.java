@@ -30,7 +30,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class ResultCountingIT
+class ResultCountingIT
     extends SurefireIntegrationTestCase
 {
     public void testCountingWithJunit481ForkNever()

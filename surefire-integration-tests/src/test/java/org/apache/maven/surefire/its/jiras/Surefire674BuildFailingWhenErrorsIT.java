@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire674BuildFailingWhenErrorsIT
+class Surefire674BuildFailingWhenErrorsIT
     extends SurefireIntegrationTestCase
 {
     public void testBuildFailingWhenErrors()

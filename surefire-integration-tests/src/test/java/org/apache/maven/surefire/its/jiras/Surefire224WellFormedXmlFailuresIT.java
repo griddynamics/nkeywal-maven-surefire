@@ -32,7 +32,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class Surefire224WellFormedXmlFailuresIT
+class Surefire224WellFormedXmlFailuresIT
     extends SurefireIntegrationTestCase
 {
     public void testWellFormedXmlFailures()

@@ -24,7 +24,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
 /**
  * @author <a href="mailto:krosenvold@apache.org">Kristian Rosenvold</a>
  */
-public class CrashDetectionIT
+class CrashDetectionIT
     extends SurefireIntegrationTestCase
 {
     public void testArgLine()

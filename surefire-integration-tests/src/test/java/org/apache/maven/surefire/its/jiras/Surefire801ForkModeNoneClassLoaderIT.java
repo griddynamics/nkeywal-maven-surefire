@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire801ForkModeNoneClassLoaderIT
+class Surefire801ForkModeNoneClassLoaderIT
     extends SurefireIntegrationTestCase
 {
     public void testSHouldBeOkWithForkNever()

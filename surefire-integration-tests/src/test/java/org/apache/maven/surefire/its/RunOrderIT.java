@@ -31,7 +31,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author Kristian Rosenvold
  */
-public class RunOrderIT
+class RunOrderIT
     extends SurefireIntegrationTestCase
 {
     private static final String[] TESTS_IN_ALPHABETICAL_ORDER = { "TA", "TB", "TC" };

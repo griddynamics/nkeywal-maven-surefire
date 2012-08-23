@@ -30,7 +30,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  * @author <a href="mailto:krosenvold@apache.org">Kristian Rosenvold</a>
  */
-public class CheckTestNgVersionsIT
+class CheckTestNgVersionsIT
     extends SurefireIntegrationTestCase
 {
 

@@ -29,7 +29,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire772NoSurefireReportsIT
+class Surefire772NoSurefireReportsIT
     extends SurefireIntegrationTestCase
 {
     public void testReportGeneration()

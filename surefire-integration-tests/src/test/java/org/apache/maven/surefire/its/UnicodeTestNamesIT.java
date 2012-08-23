@@ -34,7 +34,7 @@ import org.junit.Test;
  * <p/>
  * If the underlying file system turns out not to support unicode, we just fail an assumption.s
  */
-public class UnicodeTestNamesIT
+class UnicodeTestNamesIT
     extends SurefireJUnit4IntegrationTestCase
 {
     @Test

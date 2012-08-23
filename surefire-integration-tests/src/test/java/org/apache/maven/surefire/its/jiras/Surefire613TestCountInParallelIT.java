@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire613TestCountInParallelIT
+class Surefire613TestCountInParallelIT
     extends SurefireIntegrationTestCase
 {
     public void testPaallelBuildResultCount()

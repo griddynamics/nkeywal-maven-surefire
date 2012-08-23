@@ -29,7 +29,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire570MultipleReportDirectoriesIT
+class Surefire570MultipleReportDirectoriesIT
     extends SurefireIntegrationTestCase
 {
 

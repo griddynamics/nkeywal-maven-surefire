@@ -7,7 +7,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
 
 import org.junit.Test;
 
-public class Surefire809GroupExpressionsIT
+class Surefire809GroupExpressionsIT
     extends SurefireJUnit4IntegrationTestCase
 {
     @Test

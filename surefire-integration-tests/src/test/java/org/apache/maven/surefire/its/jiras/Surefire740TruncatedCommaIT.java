@@ -28,7 +28,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire740TruncatedCommaIT
+class Surefire740TruncatedCommaIT
     extends SurefireIntegrationTestCase
 {
     public void testRussianLocaleReport()

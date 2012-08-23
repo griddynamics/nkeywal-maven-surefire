@@ -30,7 +30,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author Kristian Rosenvold
  */
-public class ForkConsoleOutputIT
+class ForkConsoleOutputIT
     extends SurefireIntegrationTestCase
 {
 

@@ -4,7 +4,7 @@ import org.apache.maven.surefire.its.fixture.OutputValidator;
 import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
 import org.apache.maven.surefire.its.fixture.SurefireLauncher;
 
-public class Surefire828EmptyGroupExprIT
+class Surefire828EmptyGroupExprIT
     extends SurefireIntegrationTestCase
 {
     // !CategoryC

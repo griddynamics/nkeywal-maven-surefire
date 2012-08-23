@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire705ParallelForkTimeoutIT
+class Surefire705ParallelForkTimeoutIT
     extends SurefireIntegrationTestCase
 {
     public void testTimeoutForked()

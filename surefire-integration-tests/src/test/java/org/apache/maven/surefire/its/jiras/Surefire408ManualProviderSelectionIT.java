@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire408ManualProviderSelectionIT
+class Surefire408ManualProviderSelectionIT
     extends SurefireIntegrationTestCase
 {
     public void testPaallelBuildResultCount()

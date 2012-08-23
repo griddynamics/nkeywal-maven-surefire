@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author <a href="mailto:spam.haikal@gmail.com">Haikal Saadh</a>
  */
-public class TestNgGroupsIT
+class TestNgGroupsIT
     extends SurefireIntegrationTestCase
 {
     public void testTestNgGroupThreadParallel()

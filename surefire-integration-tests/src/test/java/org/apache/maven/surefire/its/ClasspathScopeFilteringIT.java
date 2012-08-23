@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  * @author pgier
  * @author <a href="mailto:krosenvold@apache.org">Kristian Rosenvold</a>
  */
-public class ClasspathScopeFilteringIT
+class ClasspathScopeFilteringIT
     extends SurefireIntegrationTestCase
 {
     public void testAdditionalClasspath()

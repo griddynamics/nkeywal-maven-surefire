@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire34SecurityManagerIT
+class Surefire34SecurityManagerIT
     extends SurefireIntegrationTestCase
 {
     public void testSecurityManager()

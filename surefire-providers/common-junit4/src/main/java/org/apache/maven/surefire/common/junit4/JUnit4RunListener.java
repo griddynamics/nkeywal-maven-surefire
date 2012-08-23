@@ -135,13 +135,13 @@ public class JUnit4RunListener
         }
     }
 
-    private SimpleReportEntry createReportEntry( Description description )
+    protected SimpleReportEntry createReportEntry( Description description )
     {
         return new SimpleReportEntry( extractClassName( description ), description.getDisplayName() );
     }
 
 
-    String extractClassName( Description description )
+    public String extractClassName( Description description )
     {
         String displayName = description.getDisplayName();
         Matcher m = PARENS.matcher( displayName );

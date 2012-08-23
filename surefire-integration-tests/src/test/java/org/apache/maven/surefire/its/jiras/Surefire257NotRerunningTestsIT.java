@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire257NotRerunningTestsIT
+class Surefire257NotRerunningTestsIT
     extends SurefireIntegrationTestCase
 {
     public void testShouldNotRerun()

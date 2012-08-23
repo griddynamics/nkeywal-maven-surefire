@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire510TestClassPathForkModesIT
+class Surefire510TestClassPathForkModesIT
     extends SurefireIntegrationTestCase
 {
 

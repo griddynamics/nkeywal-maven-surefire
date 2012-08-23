@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:stephenc@apache.org">Stephen Connolly</a>
  */
-public class WorkingDirectoryMissingIT
+class WorkingDirectoryMissingIT
     extends SurefireIntegrationTestCase
 {
     public void testWorkingDirectory()

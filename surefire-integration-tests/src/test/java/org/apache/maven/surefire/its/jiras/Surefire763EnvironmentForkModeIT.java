@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire763EnvironmentForkModeIT
+class Surefire763EnvironmentForkModeIT
     extends SurefireIntegrationTestCase
 {
     public void testWhenUseSystemClassLoader()

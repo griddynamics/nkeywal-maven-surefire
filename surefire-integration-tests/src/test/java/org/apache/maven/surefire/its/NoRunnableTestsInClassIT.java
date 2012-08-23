@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class NoRunnableTestsInClassIT
+class NoRunnableTestsInClassIT
     extends SurefireIntegrationTestCase
 {
     public void testJunit3ParallelBuildResultCount()

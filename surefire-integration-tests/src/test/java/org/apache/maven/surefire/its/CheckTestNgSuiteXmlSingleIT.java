@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class CheckTestNgSuiteXmlSingleIT
+class CheckTestNgSuiteXmlSingleIT
     extends SurefireIntegrationTestCase
 {
     public void testTestNGSuite()

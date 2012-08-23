@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire685CommaSeparatedIncludesIT
+class Surefire685CommaSeparatedIncludesIT
     extends SurefireIntegrationTestCase
 {
     public void testBuildFailingWhenErrors()

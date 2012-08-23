@@ -20,6 +20,7 @@ package org.apache.maven.surefire.its;
  */
 
 import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
+import org.junit.Test;
 
 /**
  * Test files with "Abstract" in their name that aren't really abstract,
@@ -28,7 +29,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  * @author <a href="mailto:krosenvold@apache.org">Kristian Rosenvold</a>
  */
-public class AbstractTestCaseIT
+class AbstractTestCaseIT
     extends SurefireIntegrationTestCase
 {
 

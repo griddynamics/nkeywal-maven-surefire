@@ -28,7 +28,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire500PuzzlingErrorIT
+class Surefire500PuzzlingErrorIT
     extends SurefireIntegrationTestCase
 {
     public void testBuildFailingWhenErrors()

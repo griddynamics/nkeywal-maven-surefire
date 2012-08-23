@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class Surefire44InnerClassTestIT
+class Surefire44InnerClassTestIT
     extends SurefireIntegrationTestCase
 {
     public void testInnerClass()

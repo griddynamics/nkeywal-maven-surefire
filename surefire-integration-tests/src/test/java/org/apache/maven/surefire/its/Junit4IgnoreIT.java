@@ -27,7 +27,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class Junit4IgnoreIT
+class Junit4IgnoreIT
     extends SurefireIntegrationTestCase
 {
     public void testJunit4Ignore()

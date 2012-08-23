@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Benjamin Bentmann
  */
-public class PojoSimpleIT
+class PojoSimpleIT
     extends SurefireIntegrationTestCase
 {
     public void testit()

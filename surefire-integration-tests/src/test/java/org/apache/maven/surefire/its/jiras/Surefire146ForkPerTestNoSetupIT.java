@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class Surefire146ForkPerTestNoSetupIT
+class Surefire146ForkPerTestNoSetupIT
     extends SurefireIntegrationTestCase
 {
     public void testForkPerTestNoSetup()

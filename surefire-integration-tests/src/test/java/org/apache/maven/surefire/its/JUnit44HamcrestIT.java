@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class JUnit44HamcrestIT
+class JUnit44HamcrestIT
     extends SurefireIntegrationTestCase
 {
     public void testJUnit44Hamcrest()

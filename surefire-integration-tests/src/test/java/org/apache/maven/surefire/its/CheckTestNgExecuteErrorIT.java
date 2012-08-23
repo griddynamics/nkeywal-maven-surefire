@@ -28,7 +28,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  * @author <a href="mailto:krosenvold@apache.org">Kristian Rosenvold</a>
  */
-public class CheckTestNgExecuteErrorIT
+class CheckTestNgExecuteErrorIT
     extends SurefireIntegrationTestCase
 {
     public void testExecuteError()

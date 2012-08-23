@@ -24,7 +24,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
 /**
  * @author Kristian Rosenvold
  */
-public class Surefire733AllOverrridesCapturedIT
+class Surefire733AllOverrridesCapturedIT
     extends SurefireIntegrationTestCase
 {
     public void testLogOutput()

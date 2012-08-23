@@ -30,7 +30,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  *
  * @author Kristian Rosenvold
  */
-public class ForkConsoleOutputWithErrorsIT
+class ForkConsoleOutputWithErrorsIT
     extends SurefireIntegrationTestCase
 {
     public void testXmlFileContainsConsoleOutput()

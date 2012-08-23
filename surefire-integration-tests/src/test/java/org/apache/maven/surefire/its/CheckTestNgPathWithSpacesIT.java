@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class CheckTestNgPathWithSpacesIT
+class CheckTestNgPathWithSpacesIT
     extends SurefireIntegrationTestCase
 {
     public void testTestNgTestWithSpaces()

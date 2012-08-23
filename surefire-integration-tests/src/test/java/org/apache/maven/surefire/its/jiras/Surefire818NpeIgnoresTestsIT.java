@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author Kristian Rosenvold
  */
-public class Surefire818NpeIgnoresTestsIT
+class Surefire818NpeIgnoresTestsIT
     extends SurefireIntegrationTestCase
 {
     public void testBuildFailingWhenErrors()

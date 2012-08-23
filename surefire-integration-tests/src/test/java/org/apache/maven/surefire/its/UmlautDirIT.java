@@ -32,7 +32,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  *
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  */
-public class UmlautDirIT
+class UmlautDirIT
     extends SurefireIntegrationTestCase
 {
     public void testUmlaut()

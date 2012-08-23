@@ -28,7 +28,7 @@ import org.junit.Test;
  * Failsafe should work with early return when no tests
  * s
  */
-public class Surefire901MIssingResultfileWhenNoTestsIT
+class Surefire901MIssingResultfileWhenNoTestsIT
     extends SurefireJUnit4IntegrationTestCase
 {
     @Test

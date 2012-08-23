@@ -4,7 +4,7 @@ import org.apache.maven.surefire.its.fixture.OutputValidator;
 import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
 import org.apache.maven.surefire.its.fixture.SurefireLauncher;
 
-public class Surefire832ProviderSelectionIT
+class Surefire832ProviderSelectionIT
     extends SurefireIntegrationTestCase
 {
     public void testJUnitRunCategoryAB()

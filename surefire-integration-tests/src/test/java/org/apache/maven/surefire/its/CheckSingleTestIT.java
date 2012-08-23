@@ -30,7 +30,7 @@ import org.apache.maven.surefire.its.fixture.TestFile;
  * @author <a href="mailto:dfabulich@apache.org">Dan Fabulich</a>
  * @author <a href="mailto:krosenvold@apache.org">Kristian Rosenvold</a>
  */
-public class CheckSingleTestIT
+class CheckSingleTestIT
     extends SurefireIntegrationTestCase
 {
     public void testSingleTest()

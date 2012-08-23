@@ -26,7 +26,7 @@ import org.apache.maven.surefire.its.fixture.SurefireIntegrationTestCase;
  *
  * @author <a href="mailto:olamy@apache.org">Olivier Lamy</a>
  */
-public class TestSingleMethodIT
+class TestSingleMethodIT
     extends SurefireIntegrationTestCase
 {
     public void singleMethod( String projectName )

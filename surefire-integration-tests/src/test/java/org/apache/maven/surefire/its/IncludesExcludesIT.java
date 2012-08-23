@@ -29,7 +29,7 @@ import org.apache.maven.surefire.its.fixture.SurefireLauncher;
  * @author Benjamin Bentmann
  * @version $Id$
  */
-public class IncludesExcludesIT
+class IncludesExcludesIT
     extends SurefireIntegrationTestCase
 {
     private SurefireLauncher unpack()

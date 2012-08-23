@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 @Category( Not2xCompatible.class)
-public class Surefire806SpecifiedTestControlsIT
+class Surefire806SpecifiedTestControlsIT
     extends SurefireJUnit4IntegrationTestCase
 {
 
