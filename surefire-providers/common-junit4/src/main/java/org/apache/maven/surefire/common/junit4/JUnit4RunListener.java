@@ -141,7 +141,7 @@ public class JUnit4RunListener
     }
 
 
-    public String extractClassName( Description description )
+    String extractClassName( Description description )
     {
         String displayName = description.getDisplayName();
         Matcher m = PARENS.matcher( displayName );

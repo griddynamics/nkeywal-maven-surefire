@@ -24,10 +24,7 @@ import org.apache.maven.surefire.report.*;
 import org.apache.maven.surefire.testset.TestSetFailedException;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
 
-import java.util.Map;
-import java.util.regex.Matcher;
 
 /**
  * A class to be used when there is no JUnit parallelism (methods or/and class). This
@@ -44,15 +41,6 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         // We can write immediately: no parallelism and a single class.
         ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
         //consoleLogger.info( new String( buf, off, len ) );
-    }
-
-    @Override
-    protected SimpleReportEntry createReportEntry( Description description )
-    {
-        boolean isJunit3 = description.getTestClass() == null;
-        String classNameToUse =
-                isJunit3 ? description.getChildren().get( 0 ).getClassName() : description.getClassName();
-        return new SimpleReportEntry( classNameToUse, classNameToUse, 0 );
     }
 
     @Override
