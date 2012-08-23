@@ -46,7 +46,11 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public String extractClassName( Description description )
     {
         // We know we're in JUnit4+ here, so getClassName is not null
-        return description.getClassName();
+        boolean isJunit3 = description.getTestClass() == null;
+        String classNameToUse =
+                isJunit3 ? description.getChildren().get( 0 ).getClassName() : description.getClassName();
+
+        return classNameToUse;
     }
 
     public void testRunStarted( Description description )
