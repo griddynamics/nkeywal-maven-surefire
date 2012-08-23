@@ -121,6 +121,7 @@ public class JUnitCoreProvider
         {
             filter = null;
         }
+
         org.junit.runner.notification.RunListener jUnit4RunListener;
         if ( (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod() ){
             NonConcurrentReporterManager rm = new NonConcurrentReporterManager(reporterFactory, consoleLogger);
