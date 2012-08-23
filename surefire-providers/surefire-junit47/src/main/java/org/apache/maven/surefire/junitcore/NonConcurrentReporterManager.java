@@ -39,7 +39,9 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
 
     public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
         // We can write immediately: no parallelism and a single class.
-        ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
+        //((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
+        consoleLogger.info( new String( buf, off, len ) );
+
     }
 
     @Override
