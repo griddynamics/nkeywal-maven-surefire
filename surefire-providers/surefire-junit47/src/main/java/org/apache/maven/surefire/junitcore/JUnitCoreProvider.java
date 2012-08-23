@@ -143,8 +143,9 @@ public class JUnitCoreProvider
             jUnit4RunListener = new JUnitCoreRunListener(listener, testSetMap);
         }
         customRunListeners.add( 0, jUnit4RunListener );
-
+        System.out.println("CCC before execute ");
         JUnitCoreWrapper.execute( testsToRun, jUnitCoreParameters, customRunListeners, filter );
+        System.out.println("CCC after execute ");
         return reporterFactory.close();
     }
 
