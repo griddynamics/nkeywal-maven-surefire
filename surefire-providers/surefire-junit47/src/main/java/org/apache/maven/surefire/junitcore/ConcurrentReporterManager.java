@@ -167,22 +167,23 @@ public abstract class ConcurrentReporterManager
 
     public static RunListener createInstance( Map<String, TestSet> classMethodCounts,
                                                             ReporterFactory reporterManagerFactory,
-                                                            boolean parallelClasses, boolean parallelMethods,
-                                                            boolean parallelBoth,
+                                                            boolean parallelClasses, boolean parallelBoth,
+                                                            boolean nonConcurrent,
                                                             ConsoleLogger consoleLogger )
         throws TestSetFailedException
     {
-        if ( parallelClasses )
-          {
-              return new ClassesParallelRunListener( classMethodCounts, reporterManagerFactory, consoleLogger );
-          }
-        if ( parallelBoth || parallelMethods )
+        if ( nonConcurrent )
         {
-            return new MethodsParallelRunListener( classMethodCounts, reporterManagerFactory, !parallelBoth,
-                                               consoleLogger );
+            return new NonConcurrentReporterManager( classMethodCounts, reporterManagerFactory, consoleLogger );
         }
-        // Not parallel at all.
-        return new NonConcurrentReporterManager( classMethodCounts, reporterManagerFactory, consoleLogger );
+
+        if ( parallelClasses )
+        {
+            return new ClassesParallelRunListener( classMethodCounts, reporterManagerFactory, consoleLogger );
+        }
+
+        return new MethodsParallelRunListener( classMethodCounts, reporterManagerFactory, !parallelBoth,
+                                           consoleLogger );
     }
 
 

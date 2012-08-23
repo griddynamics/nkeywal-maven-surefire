@@ -55,151 +55,142 @@ import org.junit.runner.manipulation.Filter;
 public class JUnitCoreProvider
     extends AbstractProvider
 {
-    private final ClassLoader testClassLoader;
+  private final ClassLoader testClassLoader;
 
-    private final JUnitCoreParameters jUnitCoreParameters;
+  private final JUnitCoreParameters jUnitCoreParameters;
 
-    private final ScannerFilter scannerFilter;
+  private final ScannerFilter scannerFilter;
 
-    private final List<org.junit.runner.notification.RunListener> customRunListeners;
+  private final List<org.junit.runner.notification.RunListener> customRunListeners;
 
-    private final ProviderParameters providerParameters;
+  private final ProviderParameters providerParameters;
 
 
-    private TestsToRun testsToRun;
+  private TestsToRun testsToRun;
 
-    private JUnit48Reflector jUnit48Reflector;
+  private JUnit48Reflector jUnit48Reflector;
 
-    private RunOrderCalculator runOrderCalculator;
+  private RunOrderCalculator runOrderCalculator;
 
-    private String requestedTestMethod;
+  private String requestedTestMethod;
 
-    private final ScanResult scanResult;
+  private final ScanResult scanResult;
 
-    public JUnitCoreProvider( ProviderParameters providerParameters )
+  public JUnitCoreProvider( ProviderParameters providerParameters )
+  {
+    this.providerParameters = providerParameters;
+    this.testClassLoader = providerParameters.getTestClassLoader();
+    this.scanResult = providerParameters.getScanResult();
+    this.runOrderCalculator = providerParameters.getRunOrderCalculator();
+    this.jUnitCoreParameters = new JUnitCoreParameters( providerParameters.getProviderProperties() );
+    this.scannerFilter = new JUnit4TestChecker( testClassLoader );
+    this.requestedTestMethod = providerParameters.getTestRequest().getRequestedTestMethod();
+
+    customRunListeners = JUnit4RunListenerFactory.
+        createCustomListeners( providerParameters.getProviderProperties().getProperty( "listener" ) );
+    jUnit48Reflector = new JUnit48Reflector( testClassLoader );
+  }
+
+  public Boolean isRunnable()
+  {
+    return Boolean.TRUE;
+  }
+
+  public Iterator getSuites()
+  {
+    final Filter filter = jUnit48Reflector.isJUnit48Available() ? createJUnit48Filter() : null;
+    testsToRun = getSuitesAsList( filter );
+    return testsToRun.iterator();
+  }
+
+  public RunResult invoke( Object forkTestSet )
+      throws TestSetFailedException, ReporterException
+  {
+    final ReporterFactory reporterFactory = providerParameters.getReporterFactory();
+    final ConsoleLogger consoleLogger = providerParameters.getConsoleLogger();
+
+    Filter filter = jUnit48Reflector.isJUnit48Available() ? createJUnit48Filter() : null;
+
+    if ( testsToRun == null )
     {
-        this.providerParameters = providerParameters;
-        this.testClassLoader = providerParameters.getTestClassLoader();
-        this.scanResult = providerParameters.getScanResult();
-        this.runOrderCalculator = providerParameters.getRunOrderCalculator();
-        this.jUnitCoreParameters = new JUnitCoreParameters( providerParameters.getProviderProperties() );
-        this.scannerFilter = new JUnit4TestChecker( testClassLoader );
-        this.requestedTestMethod = providerParameters.getTestRequest().getRequestedTestMethod();
-
-        customRunListeners = JUnit4RunListenerFactory.
-            createCustomListeners( providerParameters.getProviderProperties().getProperty( "listener" ) );
-        jUnit48Reflector = new JUnit48Reflector( testClassLoader );
+      testsToRun = forkTestSet == null ? getSuitesAsList( filter ) : TestsToRun.fromClass( (Class) forkTestSet );
     }
 
-    public Boolean isRunnable()
+    if ( testsToRun.size() == 0 )
     {
-        return Boolean.TRUE;
+      filter = null;
     }
 
-    public Iterator getSuites()
+    final Map<String, TestSet> testSetMap = new ConcurrentHashMap<String, TestSet>();
+
+    RunListener listener = ConcurrentReporterManager.createInstance( testSetMap, reporterFactory,
+        jUnitCoreParameters.isParallelClasses(),
+        jUnitCoreParameters.isParallelBoth(),
+        (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod(),
+        consoleLogger );
+
+    ConsoleOutputCapture.startCapture( (ConsoleOutputReceiver) listener );
+
+    org.junit.runner.notification.RunListener jUnit4RunListener = new JUnitCoreRunListener( listener, testSetMap );
+    customRunListeners.add( 0, jUnit4RunListener );
+
+    JUnitCoreWrapper.execute( testsToRun, jUnitCoreParameters, customRunListeners, filter );
+    return reporterFactory.close();
+  }
+
+  @SuppressWarnings( "unchecked" )
+  private TestsToRun getSuitesAsList( Filter filter )
+  {
+    List<Class<?>> res = new ArrayList<Class<?>>( 500 );
+    TestsToRun max = scanClassPath();
+    if ( filter == null )
     {
-        final Filter filter = jUnit48Reflector.isJUnit48Available() ? createJUnit48Filter() : null;
-        testsToRun = getSuitesAsList( filter );
-        return testsToRun.iterator();
+      return max;
     }
 
-    public RunResult invoke( Object forkTestSet )
-        throws TestSetFailedException, ReporterException
+    Iterator<Class<?>> it = max.iterator();
+    while ( it.hasNext() )
     {
-        final String message = "Concurrency config is " + jUnitCoreParameters.toString() + "\n";
-        final ReporterFactory reporterFactory = providerParameters.getReporterFactory();
-
-        final ConsoleLogger consoleLogger = providerParameters.getConsoleLogger();
-        consoleLogger.info( message );
-
-        Filter filter = jUnit48Reflector.isJUnit48Available() ? createJUnit48Filter() : null;
-
-        if ( testsToRun == null )
+      Class<?> clazz = it.next();
+      boolean isCategoryAnnotatedClass = jUnit48Reflector.isCategoryAnnotationPresent( clazz );
+      Description d = Description.createSuiteDescription( clazz );
+      if ( filter.shouldRun( d ) )
+      {
+        res.add( clazz );
+      }
+      else
+      {
+        for ( Method method : clazz.getMethods() )
         {
-            testsToRun = forkTestSet == null ? getSuitesAsList( filter ) : TestsToRun.fromClass( (Class) forkTestSet );
+          final Description testDescription =
+              Description.createTestDescription( clazz, method.getName(), method.getAnnotations() );
+          if ( filter.shouldRun( testDescription ) )
+          {
+            res.add( clazz );
+            break;
+          }
         }
-
-        if ( testsToRun.size() == 0 )
-        {
-            filter = null;
-        }
-
-      org.junit.runner.notification.RunListener jUnit4RunListener;
-
-        final Map<String, TestSet> testSetMap = new ConcurrentHashMap<String, TestSet>();
-
-        RunListener listener = ConcurrentReporterManager.createInstance( testSetMap, reporterFactory,
-                                                                         jUnitCoreParameters.isParallelClasses(),
-                                                                         jUnitCoreParameters.isParallelMethod(),
-                                                                         jUnitCoreParameters.isParallelBoth(),
-                                                                         consoleLogger );
-
-        ConsoleOutputCapture.startCapture( (ConsoleOutputReceiver) listener );
-
-        jUnit4RunListener = new JUnitCoreRunListener( listener, testSetMap );
-          /*
-      RunListener reporter = reporterFactory.createReporter();
-      ConsoleOutputCapture.startCapture((ConsoleOutputReceiver) reporter);
-      jUnit4RunListener = new NonConcurrentReporterManager2(reporter);
-             */
-      customRunListeners.add( 0, jUnit4RunListener );
-      JUnitCoreWrapper.execute( testsToRun, jUnitCoreParameters, customRunListeners, filter );
-        return reporterFactory.close();
+      }
     }
+    return new TestsToRun( res );
+  }
 
-    @SuppressWarnings( "unchecked" )
-    private TestsToRun getSuitesAsList( Filter filter )
-    {
-        List<Class<?>> res = new ArrayList<Class<?>>( 500 );
-        TestsToRun max = scanClassPath();
-        if ( filter == null )
-        {
-            return max;
-        }
+  private Filter createJUnit48Filter()
+  {
+    final FilterFactory filterFactory = new FilterFactory( testClassLoader );
+    return isMethodFilterSpecified()
+        ? filterFactory.createMethodFilter( requestedTestMethod )
+        : filterFactory.createGroupFilter( providerParameters.getProviderProperties() );
+  }
 
-        Iterator<Class<?>> it = max.iterator();
-        while ( it.hasNext() )
-        {
-            Class<?> clazz = it.next();
-            boolean isCategoryAnnotatedClass = jUnit48Reflector.isCategoryAnnotationPresent( clazz );
-            Description d = Description.createSuiteDescription( clazz );
-            if ( filter.shouldRun( d ) )
-            {
-                res.add( clazz );
-            }
-            else
-            {
-                for ( Method method : clazz.getMethods() )
-                {
-                    final Description testDescription =
-                        Description.createTestDescription( clazz, method.getName(), method.getAnnotations() );
-                    if ( filter.shouldRun( testDescription ) )
-                    {
-                        res.add( clazz );
-                        break;
-                    }
-                }
-            }
-        }
-        return new TestsToRun( res );
-    }
+  private TestsToRun scanClassPath()
+  {
+    final TestsToRun scanned = scanResult.applyFilter( scannerFilter, testClassLoader );
+    return runOrderCalculator.orderTestClasses( scanned );
+  }
 
-    private Filter createJUnit48Filter()
-    {
-        final FilterFactory filterFactory = new FilterFactory( testClassLoader );
-        return isMethodFilterSpecified()
-            ? filterFactory.createMethodFilter( requestedTestMethod )
-            : filterFactory.createGroupFilter( providerParameters.getProviderProperties() );
-    }
-
-    private TestsToRun scanClassPath()
-    {
-        final TestsToRun scanned = scanResult.applyFilter( scannerFilter, testClassLoader );
-        return runOrderCalculator.orderTestClasses( scanned );
-    }
-
-    private boolean isMethodFilterSpecified()
-    {
-        return !StringUtils.isBlank( requestedTestMethod );
-    }
+  private boolean isMethodFilterSpecified()
+  {
+    return !StringUtils.isBlank( requestedTestMethod );
+  }
 }

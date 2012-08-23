@@ -13,7 +13,8 @@ import java.util.Map;
 /**
  * A class to be used when there is no JUnit parallelism (methods or/and class). This
  *  allow to workaround JUnit limitation a la Junit4 provider. Specifically, we can redirect
- *  properly the output even if we don't have class demarcation in JUnit.
+ *  properly the output even if we don't have class demarcation in JUnit. It works only
+ *  if there is a JVM instance per test run, i.e. with forkMode=always or perthread.
  */
 public class NonConcurrentReporterManager extends ClassesParallelRunListener {
   private RunListener runListener;
