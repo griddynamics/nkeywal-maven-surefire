@@ -60,6 +60,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public void testRunStarted( Description description )
             throws Exception
     {
+        consoleLogger.info("BBBBAAAAAAA testRunStarted");
         reporter.testSetStarting( null ); // Not entirely meaningful as we can see
     }
 
@@ -67,6 +68,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public void testRunFinished( Result result )
             throws Exception
     {
+        consoleLogger.info("BBBBAAAAAAA testRunFinished");
         reporter.testSetCompleted( null );
     }
 
@@ -74,6 +76,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public NonConcurrentReporterManager(ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
         super(reporterFactory.createReporter());
+        consoleLogger.info("BBBBAAAAAAA NonConcurrentReporterManager");
         this.consoleLogger = consoleLogger;
     }
 }
