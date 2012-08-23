@@ -69,7 +69,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     {
         final long elapsed = System.currentTimeMillis() - startTime;
         SimpleReportEntry sre = new SimpleReportEntry( report.getSourceName(), report.getName(), (int)elapsed);
-        reporter.testSetCompleted( report );
+        reporter.testSetCompleted( sre );
     }
 
     ConsoleLogger consoleLogger;
