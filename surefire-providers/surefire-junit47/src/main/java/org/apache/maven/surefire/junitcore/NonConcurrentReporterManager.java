@@ -47,7 +47,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     @Override
     protected SimpleReportEntry createReportEntry( Description description )
     {
-        consoleLogger.info("CCCCAAAAAAA createReportEntry");
+        System.out.println("CCCCAAAAAAA createReportEntry");
 
         boolean isJunit3 = description.getTestClass() == null;
         String classNameToUse =
@@ -78,7 +78,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public NonConcurrentReporterManager(ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
         super(reporterFactory.createReporter());
-        consoleLogger.info("BBBBAAAAAAA NonConcurrentReporterManager");
+        System.out.println("CCCCAAAAAAA NonConcurrentReporterManager");
         this.consoleLogger = consoleLogger;
     }
 }
