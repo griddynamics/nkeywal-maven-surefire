@@ -146,19 +146,9 @@ class TestMethod
 
     public LogicalStream getLogicalStream()
     {
-        return getLogicalStream(null);
-    }
-
-    public LogicalStream getLogicalStream(LogicalStream ls)
-    {
-              if ( output == null )
-              {
-                  if ( ls == null )
-                  {
-                      output = new LogicalStream();
-                  } else {
-                      output = ls;
-                  }
+        if ( output == null )
+        {
+            output = new LogicalStream();
         }
         return output;
     }
