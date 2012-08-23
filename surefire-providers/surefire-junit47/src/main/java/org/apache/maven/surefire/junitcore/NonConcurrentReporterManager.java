@@ -35,31 +35,17 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     private ConsoleLogger consoleLogger;
     private long startTime;
     private SimpleReportEntry report;
+    private String testedClassName;
 
     public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
         // We can write immediately: no parallelism and a single class.
         ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
-        //consoleLogger.info( new String( buf, off, len ) );
     }
 
     @Override
     protected SimpleReportEntry createReportEntry( Description description )
     {
-        boolean isJunit3 = description.getTestClass() == null;
-        String classNameToUse = "no-class-name-for-"+description.getDisplayName();
-        if ( !isJunit3 )
-        {
-            classNameToUse = description.getClassName();
-        }
-        else
-        {
-            if ( !description.getChildren().isEmpty() )
-            {
-                classNameToUse = description.getChildren().get( 0 ).getClassName();
-            }
-        }
-
-        return new SimpleReportEntry( classNameToUse, classNameToUse, 0 );
+        return new SimpleReportEntry( testedClassName, testedClassName, 0 );
     }
 
     @Override
@@ -80,9 +66,12 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         reporter.testSetCompleted( sre );
     }
 
-    public NonConcurrentReporterManager(ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
+    public NonConcurrentReporterManager(Class<?> testClass, ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
         super(reporterFactory.createReporter());
         this.consoleLogger = consoleLogger;
+        // We need this because we could be called with a filtering by category that would filter everything, and
+        //  then the Description in testRunStarted would be empty.
+        this.testedClassName = testClass.getName();
     }
 }
