@@ -176,7 +176,6 @@ public abstract class ConcurrentReporterManager
         {
             return new NonConcurrentReporterManager( classMethodCounts, reporterManagerFactory, consoleLogger );
         }
-
         if ( parallelClasses )
         {
             return new ClassesParallelRunListener( classMethodCounts, reporterManagerFactory, consoleLogger );
