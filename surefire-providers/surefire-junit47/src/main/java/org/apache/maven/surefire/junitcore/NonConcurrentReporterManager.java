@@ -58,8 +58,8 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public void testRunStarted( Description description )
             throws Exception
     {
-        report = createReportEntry( null );
-        reporter.testSetStarting(report);
+        report = createReportEntry( description );
+        reporter.testSetStarting( report );
     }
 
     @Override
