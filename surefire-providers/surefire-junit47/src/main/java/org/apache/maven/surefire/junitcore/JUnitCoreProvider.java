@@ -87,7 +87,7 @@ public class JUnitCoreProvider
         this.requestedTestMethod = providerParameters.getTestRequest().getRequestedTestMethod();
 
         customRunListeners = JUnit4RunListenerFactory.
-            createCustomListeners( providerParameters.getProviderProperties().getProperty( "listener" ) );
+            createCustomListeners(providerParameters.getProviderProperties().getProperty("listener"));
         jUnit48Reflector = new JUnit48Reflector( testClassLoader );
     }
 
@@ -121,17 +121,25 @@ public class JUnitCoreProvider
         {
             filter = null;
         }
+        org.junit.runner.notification.RunListener jUnit4RunListener;
+        if ( (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod() ){
+            NonConcurrentReporterManager rm = new NonConcurrentReporterManager(reporterFactory, consoleLogger);
+            ConsoleOutputCapture.startCapture( rm );
+            jUnit4RunListener = rm;
+        }
+        else
+        {
 
-        final Map<String, TestSet> testSetMap = new ConcurrentHashMap<String, TestSet>();
+            final Map<String, TestSet> testSetMap = new ConcurrentHashMap<String, TestSet>();
 
-        RunListener listener = ConcurrentReporterManager.createInstance( testSetMap, reporterFactory,
-                                                                         jUnitCoreParameters.isParallelClasses(),
-                                                                         jUnitCoreParameters.isParallelBoth(),
-                                                                         (testsToRun.size() == 1) && !jUnitCoreParameters.isParallelMethod(),
-                                                                         consoleLogger );
-        ConsoleOutputCapture.startCapture( (ConsoleOutputReceiver) listener );
+            RunListener listener = ConcurrentReporterManager.createInstance(testSetMap, reporterFactory,
+                    jUnitCoreParameters.isParallelClasses(),
+                    jUnitCoreParameters.isParallelBoth(),
+                    consoleLogger);
+            ConsoleOutputCapture.startCapture((ConsoleOutputReceiver) listener);
 
-        org.junit.runner.notification.RunListener jUnit4RunListener = new JUnitCoreRunListener( listener, testSetMap );
+            jUnit4RunListener = new JUnitCoreRunListener(listener, testSetMap);
+        }
         customRunListeners.add( 0, jUnit4RunListener );
 
         JUnitCoreWrapper.execute( testsToRun, jUnitCoreParameters, customRunListeners, filter );

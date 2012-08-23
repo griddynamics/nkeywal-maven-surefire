@@ -19,12 +19,12 @@ package org.apache.maven.surefire.junitcore;
  * under the License.
  */
 
-import org.apache.maven.surefire.report.ConsoleLogger;
-import org.apache.maven.surefire.report.ConsoleOutputReceiver;
-import org.apache.maven.surefire.report.ReportEntry;
-import org.apache.maven.surefire.report.ReporterFactory;
-import org.apache.maven.surefire.report.RunListener;
+import org.apache.maven.surefire.common.junit4.JUnit4RunListener;
+import org.apache.maven.surefire.report.*;
 import org.apache.maven.surefire.testset.TestSetFailedException;
+import org.junit.runner.Description;
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 import java.util.Map;
 
@@ -34,34 +34,17 @@ import java.util.Map;
  * properly the output even if we don't have class demarcation in JUnit. It works when
  * if there is a JVM instance per test run, i.e. with forkMode=always or perthread.
  */
-public class NonConcurrentReporterManager extends ConcurrentReporterManager {
-    private RunListener runListener;
+public class NonConcurrentReporterManager extends JUnit4RunListener implements ConsoleOutputReceiver {
+    private ReportEntry report;
 
-    @Override
-    protected void checkIfTestSetCanBeReported(TestSet testSetForTest) {
-        testSetForTest.setAllScheduled( getRunListener() );
-    }
-
-    /**
-     * Return the runListener. There is only one for the test, as it's used when there is only one class test
-     *  to execute.
-     */
-    @Override
-    RunListener getRunListener() {
-        return runListener;
-    }
-
-
-    @Override
     public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
         // We can write immediately: no parallelism and a single class.
-        ((ConsoleOutputReceiver) getRunListener()).writeTestOutput(buf, off, len, stdout);
+        ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
     }
 
 
-    public NonConcurrentReporterManager(Map<String, TestSet> classMethodCounts, ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
+    public NonConcurrentReporterManager(ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
-        super(reporterFactory, consoleLogger, true, classMethodCounts);
-        runListener = reporterFactory.createReporter();
+        super(reporterFactory.createReporter());
     }
 }
