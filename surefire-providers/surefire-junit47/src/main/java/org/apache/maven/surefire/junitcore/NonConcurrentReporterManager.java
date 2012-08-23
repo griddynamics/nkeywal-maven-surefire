@@ -55,11 +55,12 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     }
 
 
+
     @Override
     public void testRunStarted( Description description )
             throws Exception
     {
-        reporter.testSetStarting( null ); // Not entirely meaningful as we can see
+        consoleLogger.info("BBBBAAAAAAACCC testRunStarted ");
     }
 
     @Override
@@ -67,7 +68,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
             throws Exception
     {
         consoleLogger.info("BBBBAAAAAAACCC testRunFinished "+result);
-        reporter.testSetCompleted( null );
+        //reporter.testSetCompleted( null );
     }
 
     ConsoleLogger consoleLogger;
