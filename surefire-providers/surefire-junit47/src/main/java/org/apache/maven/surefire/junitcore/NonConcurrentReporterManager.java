@@ -35,7 +35,6 @@ import java.util.Map;
  * if there is a JVM instance per test run, i.e. with forkMode=always or perthread.
  */
 public class NonConcurrentReporterManager extends JUnit4RunListener implements ConsoleOutputReceiver {
-    private ReportEntry report;
 
     public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
         // We can write immediately: no parallelism and a single class.
