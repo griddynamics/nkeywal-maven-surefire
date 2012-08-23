@@ -27,6 +27,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
  * A class to be used when there is no JUnit parallelism (methods or/and class). This
@@ -39,6 +40,13 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
         // We can write immediately: no parallelism and a single class.
         ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
+    }
+
+    @Override
+    public String extractClassName( Description description )
+    {
+        // We know we're in JUnit4+ here, so getClassName is not null
+        return description.getClassName();
     }
 
 

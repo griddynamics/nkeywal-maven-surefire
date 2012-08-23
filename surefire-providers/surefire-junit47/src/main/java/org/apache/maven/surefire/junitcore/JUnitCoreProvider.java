@@ -129,7 +129,6 @@ public class JUnitCoreProvider
         }
         else
         {
-
             final Map<String, TestSet> testSetMap = new ConcurrentHashMap<String, TestSet>();
 
             RunListener listener = ConcurrentReporterManager.createInstance(testSetMap, reporterFactory,
