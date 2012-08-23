@@ -51,8 +51,6 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         boolean isJunit3 = description.getTestClass() == null;
         String classNameToUse =
                 isJunit3 ? description.getChildren().get( 0 ).getClassName() : description.getClassName();
-        System.out.println("AAAAAAA "+classNameToUse+" "+isJunit3);
-        consoleLogger.info("CCCCAAAAAAA "+classNameToUse+" "+isJunit3);
         return new SimpleReportEntry( classNameToUse, classNameToUse, 0 );
     }
 
@@ -61,7 +59,6 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public void testRunStarted( Description description )
             throws Exception
     {
-        consoleLogger.info("BBBBAAAAAAA testRunStarted");
         reporter.testSetStarting( null ); // Not entirely meaningful as we can see
     }
 
@@ -69,7 +66,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     public void testRunFinished( Result result )
             throws Exception
     {
-        consoleLogger.info("BBBBAAAAAAA testRunFinished");
+        consoleLogger.info("BBBBAAAAAAACCC testRunFinished "+result);
         reporter.testSetCompleted( null );
     }
 
