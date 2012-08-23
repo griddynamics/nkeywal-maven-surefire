@@ -49,6 +49,13 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     }
 
     @Override
+    public String extractClassName( Description description )
+    {
+        return testedClassName;
+    }
+
+
+        @Override
     public void testRunStarted( Description description )
             throws Exception
     {
