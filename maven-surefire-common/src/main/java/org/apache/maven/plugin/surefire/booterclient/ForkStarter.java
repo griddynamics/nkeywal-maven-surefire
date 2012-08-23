@@ -140,7 +140,10 @@ public class ForkStarter
                                                final SurefireProperties effectiveSystemProperties, int forkCount )
         throws SurefireBooterForkException
     {
-
+        if (forkCount < 1)
+        {
+            throw new IllegalArgumentException("forkCount should be superior to zero, it was: "+forkCount);
+        }
         ArrayList<Future<RunResult>> results = new ArrayList<Future<RunResult>>( 500 );
         ExecutorService executorService = new ThreadPoolExecutor( forkCount, forkCount, 60, TimeUnit.SECONDS,
                                                                   new ArrayBlockingQueue<Runnable>( 500 ) );
