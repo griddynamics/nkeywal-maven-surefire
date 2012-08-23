@@ -49,6 +49,7 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         String classNameToUse =
                 isJunit3 ? description.getChildren().get( 0 ).getClassName() : description.getClassName();
         System.out.println("AAAAAAA "+classNameToUse+" "+isJunit3);
+        consoleLogger.info("BBBBAAAAAAA "+classNameToUse+" "+isJunit3);
         return new SimpleReportEntry( classNameToUse, classNameToUse, 0 );
     }
 
@@ -67,9 +68,10 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
         reporter.testSetCompleted( null );
     }
 
-
+    ConsoleLogger consoleLogger;
     public NonConcurrentReporterManager(ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
             throws TestSetFailedException {
         super(reporterFactory.createReporter());
+        this.consoleLogger = consoleLogger;
     }
 }
