@@ -47,6 +47,8 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     @Override
     protected SimpleReportEntry createReportEntry( Description description )
     {
+        consoleLogger.info("CCCCAAAAAAA createReportEntry");
+
         boolean isJunit3 = description.getTestClass() == null;
         String classNameToUse =
                 isJunit3 ? description.getChildren().get( 0 ).getClassName() : description.getClassName();
