@@ -39,15 +39,13 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
 
     public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
         // We can write immediately: no parallelism and a single class.
-        //((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
-        consoleLogger.info( new String( buf, off, len ) );
+        ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
+        //consoleLogger.info( new String( buf, off, len ) );
     }
 
     @Override
     protected SimpleReportEntry createReportEntry( Description description )
     {
-        consoleLogger.info("CCCCAAAAAAA createReportEntry");
-
         boolean isJunit3 = description.getTestClass() == null;
         String classNameToUse =
                 isJunit3 ? description.getChildren().get( 0 ).getClassName() : description.getClassName();
@@ -55,20 +53,20 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     }
 
 
-
+    ReportEntry report
     @Override
     public void testRunStarted( Description description )
             throws Exception
     {
-        consoleLogger.info("BBBBAAAAAAACCC testRunStarted ");
+        ReportEntry report = createReportEntry( null );
+        reporter.testSetStarting(report);
     }
 
     @Override
     public void testRunFinished( Result result )
             throws Exception
     {
-        consoleLogger.info("BBBBAAAAAAACCC testRunFinished "+result);
-        //reporter.testSetCompleted( null );
+        reporter.testSetCompleted( report );
     }
 
     ConsoleLogger consoleLogger;
