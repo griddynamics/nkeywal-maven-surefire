@@ -59,6 +59,8 @@ public class AsynchronousRunner
         }
         catch ( ExecutionException e )
         {
+            System.out.println("AAAAAAAAAAA ExecutionException="+e.getCause().getMessage());
+            e.getCause().printStackTrace();
             throw new NestedRuntimeException( e );
         }
     }
