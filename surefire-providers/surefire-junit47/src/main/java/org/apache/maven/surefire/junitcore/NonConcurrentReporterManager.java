@@ -37,7 +37,8 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     private SimpleReportEntry report;
     private String testedClassName;
 
-    public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout) {
+    public synchronized void writeTestOutput(byte[] buf, int off, int len, boolean stdout)
+    {
         // We can write immediately: no parallelism and a single class.
         ((ConsoleOutputReceiver) reporter).writeTestOutput(buf, off, len, stdout);
     }
@@ -74,7 +75,8 @@ public class NonConcurrentReporterManager extends JUnit4RunListener implements C
     }
 
     public NonConcurrentReporterManager(Class<?> testClass, ReporterFactory reporterFactory, ConsoleLogger consoleLogger)
-            throws TestSetFailedException {
+            throws TestSetFailedException
+    {
         super(reporterFactory.createReporter());
         this.consoleLogger = consoleLogger;
         // We need this because we could be called with a filtering by category that would filter everything, and
