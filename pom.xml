@@ -37,6 +37,13 @@
   <url>http://maven.apache.org/surefire</url>
   <inceptionYear>2004</inceptionYear>
 
+  <distributionManagement>
+    <repository>
+      <id>aws-nexus</id>
+      <url>http://ec2-54-235-46-104.compute-1.amazonaws.com:8081/nexus/content/repositories/releases</url>
+    </repository>
+  </distributionManagement>
+
   <contributors>
     <contributor>
       <name>Jesse Kuhnert</name>
